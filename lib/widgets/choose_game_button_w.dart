@@ -13,10 +13,11 @@ class ChooseGameButtonW extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextButton.icon(
+      // style: TextButton.styleFrom(,
         onPressed: () {
           Navigator.pushNamed(context, gameRoute);
         },
-        icon: Icon(gameIcon),
-        label: Text(gameName));
+        icon: Icon(gameIcon, color: Theme.of(context).colorScheme.secondary),
+        label: Text(gameName, style: TextStyle(color: Theme.of(context).colorScheme.secondary)));
   }
 }

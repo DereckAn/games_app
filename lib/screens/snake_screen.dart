@@ -13,24 +13,45 @@ class SnakeScreen extends StatefulWidget {
 class _SnakeScreenState extends State<SnakeScreen> {
   final int squaresPerRow = 20;
   final int squaresPerCol = 40;
-  final textStyle = const TextStyle(color: Color.fromARGB(255, 0, 0, 0));
+
   final randomGen = Random();
+  late Timer gameTimer;
 
   List<int> snakePosition = [45, 65, 85, 105, 125];
   int food = 300;
   String direction = 'down';
+  bool isGamePaused = false;
+  bool isGameStarted = false;
+
+  void initializeGame() {
+    snakePosition = [45, 65, 85, 105, 125];
+    direction = 'down';
+    food = randomGen.nextInt((squaresPerCol * squaresPerRow) - 1);
+  }
 
   void startGame() {
     const duration = Duration(milliseconds: 200);
 
-    snakePosition = [45, 65, 85, 105, 125];
-    direction = 'down';
-    food = randomGen.nextInt(700);
+    gameTimer = Timer.periodic(duration, (Timer timer) {
+      if (!isGamePaused) {
+        updateSnake();
+        if (gameOver()) {
+          timer.cancel();
+        }
+      }
+    });
+    setState(() {
+      isGameStarted = true;
+    });
+  }
 
-    Timer.periodic(duration, (Timer timer) {
-      updateSnake();
-      if (gameOver()) {
-        timer.cancel();
+  void pauseGame() {
+    setState(() {
+      isGamePaused = !isGamePaused;
+      if (isGamePaused) {
+        gameTimer.cancel();
+      } else {
+        startGame();
       }
     });
   }
@@ -78,22 +99,15 @@ class _SnakeScreenState extends State<SnakeScreen> {
   }
 
   bool gameOver() {
-    for (int i = 0; i < snakePosition.length; i++) {
-      int count = 0;
-      for (int j = 0; j < snakePosition.length; j++) {
-        if (snakePosition[i] == snakePosition[j]) {
-          count += 1;
-        }
-        if (count == 2) {
-          return true;
-        }
-      }
-    }
-    return false;
+    return snakePosition.toSet().length != snakePosition.length;
+    //En este código, snakePosition.toSet() convierte snakePosition a un Set, que es una colección de elementos únicos. Si la longitud del
+    //Set es diferente a la longitud de snakePosition, eso significa que hay duplicados en snakePosition,
+    //por lo que la serpiente se ha chocado consigo misma y el juego ha terminado.
   }
 
   @override
   Widget build(BuildContext context) {
+    final textStyle = TextStyle(color: Theme.of(context).colorScheme.secondary);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: Column(
@@ -121,10 +135,12 @@ class _SnakeScreenState extends State<SnakeScreen> {
               child: AspectRatio(
                 aspectRatio: squaresPerRow / (squaresPerCol + 5),
                 child: GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
+                  physics:
+                      const NeverScrollableScrollPhysics(), //Esto se usa para deshabilitar el desplazamiento en la cuadrícula.
                   itemCount: squaresPerRow * squaresPerCol,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: squaresPerRow,
+                    //Esto se usa para controlar el diseño de los elementos de la cuadrícula. Aquí, se establece que cada fila tendrá squaresPerRow = 20 cuadrados.
                   ),
                   itemBuilder: (BuildContext context, int index) {
                     if (snakePosition.contains(index)) {
@@ -163,10 +179,16 @@ class _SnakeScreenState extends State<SnakeScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
-                GestureDetector(
-                  onTap: startGame,
-                  child: Text("START", style: textStyle),
-                ),
+                isGameStarted
+                    ? GestureDetector(
+                        onTap: pauseGame,
+                        child: Text(isGamePaused ? "Resume" : "Pause",
+                            style: textStyle),
+                      )
+                    : GestureDetector(
+                        onTap: startGame,
+                        child: Text("START", style: textStyle),
+                      ),
                 Text("Score: ${snakePosition.length}", style: textStyle),
               ],
             ),
