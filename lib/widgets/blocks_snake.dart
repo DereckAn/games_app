@@ -13,6 +13,5 @@ class BlocksSnake extends StatelessWidget {
         child: Container(color:color),
       ),
     );
-    ;
   }
 }

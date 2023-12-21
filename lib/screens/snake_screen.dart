@@ -18,17 +18,12 @@ class _SnakeScreenState extends State<SnakeScreen> {
   final int initialSnakePosition = 45;
   final randomGen = Random();
 
-  late Timer poisonFoodTimer;
+  // late Timer poisonFoodTimer;
   late Timer gameTimer;
   late int otroLado = (squaresPerRow * squaresPerCol);
-  late List<int> snakePosition = [
-    initialSnakePosition,
-    initialSnakePosition + (squaresPerRow * 1),
-    initialSnakePosition + (squaresPerRow * 2),
-    initialSnakePosition + (squaresPerRow * 3),
-    initialSnakePosition + (squaresPerRow * 4)
-  ];
-  int food = 300;
+  late List<int> snakePosition = List<int>.generate(
+      initialSnakeSize, (i) => initialSnakePosition + (squaresPerRow * i));
+  int food = 855;
   int poisonFood = -1;
   String direction = 'down';
   bool isGamePaused = false;
@@ -42,9 +37,9 @@ class _SnakeScreenState extends State<SnakeScreen> {
             (squaresPerRow *
                 index)); // & Esto es un for loop para decir lo mismo que SnakePosition en la linea 20
     direction = 'down';
-    food = randomGen.nextInt((squaresPerCol * squaresPerRow) - 1);
-    poisonFoodTimer.cancel();
-    poisonFood = -1;
+    food = randomGen.nextInt(otroLado - 1);
+    // poisonFoodTimer.cancel();
+    // poisonFood = -1;
   }
 
   void startGame() {
@@ -53,25 +48,26 @@ class _SnakeScreenState extends State<SnakeScreen> {
     gameTimer = Timer.periodic(duration, (Timer timer) {
       if (!isGamePaused) {
         updateSnake();
-        if (gameOver()) {
+        if (checkGameOver()) {
           timer.cancel();
-
         }
-      } else {
-        poisonFoodTimer.cancel();
       }
     });
+
     setState(() {
       isGameStarted = true;
     });
-    poisonFoodTimer =
-        Timer.periodic(const Duration(seconds: 20), (Timer timer) {
-      generatePoisonFood();
-      Timer(const Duration(seconds: 10), () {
-        setState(() {
-          poisonFood = -1;
-        });
-      });
+  }
+
+  void pauseGame() {
+    setState(() {
+      isGamePaused = !isGamePaused;
+      if (isGamePaused) {
+        // poisonFoodTimer.cancel();
+        gameTimer.cancel();
+      } else {
+        startGame();
+      }
     });
   }
 
@@ -85,34 +81,11 @@ class _SnakeScreenState extends State<SnakeScreen> {
     });
   }
 
-  void pauseGame() {
-    setState(() {
-      isGamePaused = !isGamePaused;
-      if (isGamePaused) {
-        poisonFoodTimer.cancel();
-        gameTimer.cancel();
-      } else {
-        startGame();
-        poisonFoodTimer =
-            Timer.periodic(const Duration(seconds: 20), (Timer timer) {
-          generatePoisonFood();
-          Timer(const Duration(seconds: 10), () {
-            setState(() {
-              poisonFood = -1;
-            });
-          });
-        });
-      }
-    });
-  }
-
   void generateNewFood() {
     int newFoodPosition = randomGen.nextInt(otroLado - 1);
-
     while (snakePosition.contains(newFoodPosition)) {
       newFoodPosition = randomGen.nextInt(otroLado - 1);
     }
-
     food = newFoodPosition;
   }
 
@@ -152,61 +125,64 @@ class _SnakeScreenState extends State<SnakeScreen> {
 
       if (snakePosition.last == food) {
         generateNewFood();
-      } else if (snakePosition.last == poisonFood) {
-        gameOver();
       } else {
         snakePosition.removeAt(0);
       }
-
     });
   }
 
-  bool gameOver() {
+  bool checkGameOver() {
     if (snakePosition.toSet().length != snakePosition.length) {
-      // Si el juego ha terminado, muestra un AlertDialog
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            title: const Text(
-              'Game Over',
-              style: TextStyle(color: Colors.red),
-            ),
-            content: Text(
-                'Total Score: ${snakePosition.length - initialSnakeSize} \n Play Again?'),
-            actions: <Widget>[
-              TextButton(
-                child: Text(
-                  'Yes',
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.secondary),
-                ),
-                onPressed: () {
-                  initializeGame();
-                  startGame();
-                  Navigator.of(context).pop();
-                },
-              ),
-              TextButton(
-                child: Text(
-                  'No',
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.secondary),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          );
-        },
-      );
+      endGame();
       return true;
     }
     return false;
+  }
+
+  void endGame() {
+    if (gameTimer.isActive) {
+      gameTimer.cancel();
+    }
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          title: const Text(
+            'Game Over',
+            style: TextStyle(color: Colors.red),
+          ),
+          content: Text(
+              'Total Score: ${snakePosition.length - initialSnakeSize} \n Play Again?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'Yes',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+              ),
+              onPressed: () {
+                initializeGame();
+                startGame();
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                'No',
+                style:
+                    TextStyle(color: Theme.of(context).colorScheme.secondary),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   // bool gameOver() {
@@ -249,18 +225,24 @@ class _SnakeScreenState extends State<SnakeScreen> {
                 child: GridView.builder(
                   physics:
                       const NeverScrollableScrollPhysics(), //Esto se usa para deshabilitar el desplazamiento en la cuadrícula.
-                  itemCount: squaresPerRow * squaresPerCol,
+                  itemCount: otroLado,
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: squaresPerRow,
                     //Esto se usa para controlar el diseño de los elementos de la cuadrícula. Aquí, se establece que cada fila tendrá squaresPerRow = 20 cuadrados.
                   ),
                   itemBuilder: (BuildContext context, int index) {
                     if (snakePosition.contains(index)) {
-                      return const BlocksSnake(color: Colors.green,);
+                      return const BlocksSnake(
+                        color: Colors.green,
+                      );
                     } else if (index == food) {
-                      return const BlocksSnake(color: Colors.red,);
+                      return const BlocksSnake(
+                        color: Colors.red,
+                      );
                     } else if (index == poisonFood) {
-                      return const BlocksSnake(color: Colors.purple,);
+                      return const BlocksSnake(
+                        color: Colors.purple,
+                      );
                     } else {
                       return const BlocksSnake(color: Color(0xFF1D1D1D));
                     }
@@ -271,7 +253,7 @@ class _SnakeScreenState extends State<SnakeScreen> {
           ),
           Padding(
             padding:
-                const EdgeInsets.only(bottom: 10.0, left: 20.0, right: 20.0),
+                const EdgeInsets.only(bottom: 5.0, left: 20.0, right: 20.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -284,6 +266,15 @@ class _SnakeScreenState extends State<SnakeScreen> {
                     : GestureDetector(
                         onTap: startGame,
                         child: Text("START", style: textStyle),
+                      ),
+                isGameStarted
+                    ? GestureDetector(
+                        onTap: endGame,
+                        child: Text("Die", style: textStyle),
+                      )
+                    : GestureDetector(
+                        onTap: () => Navigator.of(context).pop(),
+                        child: Text("Exit", style: textStyle),
                       ),
                 Text("Apples: ${snakePosition.length - initialSnakeSize}",
                     style: textStyle),
