@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:app_juegos/widgets/blocks_snake.dart';
 import 'package:flutter/material.dart';
 
 class SnakeScreen extends StatefulWidget {
@@ -17,6 +18,7 @@ class _SnakeScreenState extends State<SnakeScreen> {
   final int initialSnakePosition = 45;
   final randomGen = Random();
 
+  late Timer poisonFoodTimer;
   late Timer gameTimer;
   late int otroLado = (squaresPerRow * squaresPerCol);
   late List<int> snakePosition = [
@@ -27,6 +29,7 @@ class _SnakeScreenState extends State<SnakeScreen> {
     initialSnakePosition + (squaresPerRow * 4)
   ];
   int food = 300;
+  int poisonFood = -1;
   String direction = 'down';
   bool isGamePaused = false;
   bool isGameStarted = false;
@@ -40,6 +43,8 @@ class _SnakeScreenState extends State<SnakeScreen> {
                 index)); // & Esto es un for loop para decir lo mismo que SnakePosition en la linea 20
     direction = 'down';
     food = randomGen.nextInt((squaresPerCol * squaresPerRow) - 1);
+    poisonFoodTimer.cancel();
+    poisonFood = -1;
   }
 
   void startGame() {
@@ -50,11 +55,33 @@ class _SnakeScreenState extends State<SnakeScreen> {
         updateSnake();
         if (gameOver()) {
           timer.cancel();
+
         }
+      } else {
+        poisonFoodTimer.cancel();
       }
     });
     setState(() {
       isGameStarted = true;
+    });
+    poisonFoodTimer =
+        Timer.periodic(const Duration(seconds: 20), (Timer timer) {
+      generatePoisonFood();
+      Timer(const Duration(seconds: 10), () {
+        setState(() {
+          poisonFood = -1;
+        });
+      });
+    });
+  }
+
+  void generatePoisonFood() {
+    int newPoisonFoodPosition = randomGen.nextInt(otroLado - 1);
+    while (snakePosition.contains(newPoisonFoodPosition)) {
+      newPoisonFoodPosition = randomGen.nextInt(otroLado - 1);
+    }
+    setState(() {
+      poisonFood = newPoisonFoodPosition;
     });
   }
 
@@ -62,9 +89,19 @@ class _SnakeScreenState extends State<SnakeScreen> {
     setState(() {
       isGamePaused = !isGamePaused;
       if (isGamePaused) {
+        poisonFoodTimer.cancel();
         gameTimer.cancel();
       } else {
         startGame();
+        poisonFoodTimer =
+            Timer.periodic(const Duration(seconds: 20), (Timer timer) {
+          generatePoisonFood();
+          Timer(const Duration(seconds: 10), () {
+            setState(() {
+              poisonFood = -1;
+            });
+          });
+        });
       }
     });
   }
@@ -115,9 +152,12 @@ class _SnakeScreenState extends State<SnakeScreen> {
 
       if (snakePosition.last == food) {
         generateNewFood();
+      } else if (snakePosition.last == poisonFood) {
+        gameOver();
       } else {
         snakePosition.removeAt(0);
       }
+
     });
   }
 
@@ -156,7 +196,6 @@ class _SnakeScreenState extends State<SnakeScreen> {
                       TextStyle(color: Theme.of(context).colorScheme.secondary),
                 ),
                 onPressed: () {
-                  // Aquí puedes poner el código para salir del juego
                   Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 },
@@ -217,29 +256,13 @@ class _SnakeScreenState extends State<SnakeScreen> {
                   ),
                   itemBuilder: (BuildContext context, int index) {
                     if (snakePosition.contains(index)) {
-                      return Container(
-                        padding: const EdgeInsets.all(1),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: Container(color: Colors.green),
-                        ),
-                      );
+                      return const BlocksSnake(color: Colors.green,);
                     } else if (index == food) {
-                      return Container(
-                        padding: const EdgeInsets.all(1),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: Container(color: Colors.red),
-                        ),
-                      );
+                      return const BlocksSnake(color: Colors.red,);
+                    } else if (index == poisonFood) {
+                      return const BlocksSnake(color: Colors.purple,);
                     } else {
-                      return Container(
-                        padding: const EdgeInsets.all(1),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(4),
-                          child: Container(color: Colors.grey[900]),
-                        ),
-                      );
+                      return const BlocksSnake(color: Color(0xFF1D1D1D));
                     }
                   },
                 ),
