@@ -11,20 +11,33 @@ class SnakeScreen extends StatefulWidget {
 }
 
 class _SnakeScreenState extends State<SnakeScreen> {
-  final int squaresPerRow = 20;
-  final int squaresPerCol = 40;
-
+  final int squaresPerRow = 25;
+  final int squaresPerCol = 50;
+  final int initialSnakeSize = 5;
+  final int initialSnakePosition = 45;
   final randomGen = Random();
-  late Timer gameTimer;
 
-  List<int> snakePosition = [45, 65, 85, 105, 125];
+  late Timer gameTimer;
+  late int otroLado = (squaresPerRow * squaresPerCol);
+  late List<int> snakePosition = [
+    initialSnakePosition,
+    initialSnakePosition + (squaresPerRow * 1),
+    initialSnakePosition + (squaresPerRow * 2),
+    initialSnakePosition + (squaresPerRow * 3),
+    initialSnakePosition + (squaresPerRow * 4)
+  ];
   int food = 300;
   String direction = 'down';
   bool isGamePaused = false;
   bool isGameStarted = false;
 
   void initializeGame() {
-    snakePosition = [45, 65, 85, 105, 125];
+    snakePosition = List<int>.generate(
+        initialSnakeSize,
+        (index) =>
+            initialSnakePosition +
+            (squaresPerRow *
+                index)); // & Esto es un for loop para decir lo mismo que SnakePosition en la linea 20
     direction = 'down';
     food = randomGen.nextInt((squaresPerCol * squaresPerRow) - 1);
   }
@@ -56,33 +69,43 @@ class _SnakeScreenState extends State<SnakeScreen> {
     });
   }
 
+  void generateNewFood() {
+    int newFoodPosition = randomGen.nextInt(otroLado - 1);
+
+    while (snakePosition.contains(newFoodPosition)) {
+      newFoodPosition = randomGen.nextInt(otroLado - 1);
+    }
+
+    food = newFoodPosition;
+  }
+
   void updateSnake() {
     setState(() {
       switch (direction) {
         case 'down':
-          if (snakePosition.last > 760) {
-            snakePosition.add(snakePosition.last + 20 - 800);
+          if (snakePosition.last > otroLado - squaresPerRow) {
+            snakePosition.add(snakePosition.last + squaresPerRow - otroLado);
           } else {
-            snakePosition.add(snakePosition.last + 20);
+            snakePosition.add(snakePosition.last + squaresPerRow);
           }
           break;
         case 'up':
-          if (snakePosition.last < 20) {
-            snakePosition.add(snakePosition.last - 20 + 800);
+          if (snakePosition.last < squaresPerRow) {
+            snakePosition.add(snakePosition.last - squaresPerRow + otroLado);
           } else {
-            snakePosition.add(snakePosition.last - 20);
+            snakePosition.add(snakePosition.last - squaresPerRow);
           }
           break;
         case 'left':
-          if (snakePosition.last % 20 == 0) {
-            snakePosition.add(snakePosition.last - 1 + 20);
+          if (snakePosition.last % squaresPerRow == 0) {
+            snakePosition.add(snakePosition.last - 1 + squaresPerRow);
           } else {
             snakePosition.add(snakePosition.last - 1);
           }
           break;
         case 'right':
-          if ((snakePosition.last + 1) % 20 == 0) {
-            snakePosition.add(snakePosition.last + 1 - 20);
+          if ((snakePosition.last + 1) % squaresPerRow == 0) {
+            snakePosition.add(snakePosition.last + 1 - squaresPerRow);
           } else {
             snakePosition.add(snakePosition.last + 1);
           }
@@ -91,7 +114,7 @@ class _SnakeScreenState extends State<SnakeScreen> {
       }
 
       if (snakePosition.last == food) {
-        food = randomGen.nextInt(700);
+        generateNewFood();
       } else {
         snakePosition.removeAt(0);
       }
@@ -99,15 +122,65 @@ class _SnakeScreenState extends State<SnakeScreen> {
   }
 
   bool gameOver() {
-    return snakePosition.toSet().length != snakePosition.length;
-    //En este código, snakePosition.toSet() convierte snakePosition a un Set, que es una colección de elementos únicos. Si la longitud del
-    //Set es diferente a la longitud de snakePosition, eso significa que hay duplicados en snakePosition,
-    //por lo que la serpiente se ha chocado consigo misma y el juego ha terminado.
+    if (snakePosition.toSet().length != snakePosition.length) {
+      // Si el juego ha terminado, muestra un AlertDialog
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            title: const Text(
+              'Game Over',
+              style: TextStyle(color: Colors.red),
+            ),
+            content: Text(
+                'Total Score: ${snakePosition.length - initialSnakeSize} \n Play Again?'),
+            actions: <Widget>[
+              TextButton(
+                child: Text(
+                  'Yes',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                ),
+                onPressed: () {
+                  initializeGame();
+                  startGame();
+                  Navigator.of(context).pop();
+                },
+              ),
+              TextButton(
+                child: Text(
+                  'No',
+                  style:
+                      TextStyle(color: Theme.of(context).colorScheme.secondary),
+                ),
+                onPressed: () {
+                  // Aquí puedes poner el código para salir del juego
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+      return true;
+    }
+    return false;
   }
+
+  // bool gameOver() {
+  //   return snakePosition.toSet().length != snakePosition.length;
+  //En este código, snakePosition.toSet() convierte snakePosition a un Set, que es una colección de elementos únicos. Si la longitud del
+  //Set es diferente a la longitud de snakePosition, eso significa que hay duplicados en snakePosition,
+  //por lo que la serpiente se ha chocado consigo misma y el juego ha terminado.
+  // }
 
   @override
   Widget build(BuildContext context) {
     final textStyle = TextStyle(color: Theme.of(context).colorScheme.secondary);
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
       body: Column(
@@ -133,7 +206,7 @@ class _SnakeScreenState extends State<SnakeScreen> {
                 }
               },
               child: AspectRatio(
-                aspectRatio: squaresPerRow / (squaresPerCol + 5),
+                aspectRatio: squaresPerRow / (squaresPerCol + 3),
                 child: GridView.builder(
                   physics:
                       const NeverScrollableScrollPhysics(), //Esto se usa para deshabilitar el desplazamiento en la cuadrícula.
@@ -145,25 +218,25 @@ class _SnakeScreenState extends State<SnakeScreen> {
                   itemBuilder: (BuildContext context, int index) {
                     if (snakePosition.contains(index)) {
                       return Container(
-                        padding: const EdgeInsets.all(2),
+                        padding: const EdgeInsets.all(1),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
+                          borderRadius: BorderRadius.circular(4),
                           child: Container(color: Colors.green),
                         ),
                       );
                     } else if (index == food) {
                       return Container(
-                        padding: const EdgeInsets.all(2),
+                        padding: const EdgeInsets.all(1),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
+                          borderRadius: BorderRadius.circular(4),
                           child: Container(color: Colors.red),
                         ),
                       );
                     } else {
                       return Container(
-                        padding: const EdgeInsets.all(2),
+                        padding: const EdgeInsets.all(1),
                         child: ClipRRect(
-                          borderRadius: BorderRadius.circular(5),
+                          borderRadius: BorderRadius.circular(4),
                           child: Container(color: Colors.grey[900]),
                         ),
                       );
@@ -189,7 +262,8 @@ class _SnakeScreenState extends State<SnakeScreen> {
                         onTap: startGame,
                         child: Text("START", style: textStyle),
                       ),
-                Text("Score: ${snakePosition.length}", style: textStyle),
+                Text("Apples: ${snakePosition.length - initialSnakeSize}",
+                    style: textStyle),
               ],
             ),
           ),

@@ -19,7 +19,10 @@ class _MyHomePageState extends State<MyHomePage> {
         preferredSize: const Size.fromHeight(20.0), // here the desired height
         child: AppBar(
           backgroundColor: Theme.of(context).colorScheme.onPrimary,
-          title: Text(widget.title, style: const TextStyle(fontSize: 20.0),  ),
+          title: Text(
+            widget.title,
+            style: const TextStyle(fontSize: 20.0),
+          ),
         ),
       ),
       body: const Center(
@@ -42,6 +45,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 gameIcon: Icons.sync_alt_sharp,
                 gameName: '2048',
                 gameRoute: '/2048'),
+            // ChooseGameButtonW(
+            //     gameIcon: Icons.sync_alt_sharp,
+            //     gameName: 'Prueba',
+            //     gameRoute: '/prueba'),
           ],
         ),
       ),

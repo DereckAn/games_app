@@ -15,6 +15,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // double screenWidth = MediaQuery.of(context).size.width;
+    // double screenHeight = MediaQuery.of(context).size.height;
+    // print('screenWidth: $screenWidth');
+    // print('screenHeight: $screenHeight');
+    // print(
+    //   MediaQuery.of(context).size.width ~/ 30,
+    // );
+
     return MaterialApp(
       initialRoute: '/',
       routes: {
@@ -23,6 +31,7 @@ class MyApp extends StatelessWidget {
         '/tetris': (context) => const TetrisScreen(),
         '/snake': (context) => const SnakeScreen(),
         '/2048': (context) => const Screen2048(),
+        // '/prueba': (context) => const Prueba(),
       },
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -30,7 +39,8 @@ class MyApp extends StatelessWidget {
           primary: Color.fromARGB(255, 23, 23, 23),
           secondary: Colors.blue,
           surface: Colors.blue,
-          background: Colors.blue,),
+          background: Colors.blue,
+        ),
         useMaterial3: true,
       ),
       // home: const MyHomePage(title: 'Flutter Demo Home Page'),
