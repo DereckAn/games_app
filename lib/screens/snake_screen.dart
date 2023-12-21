@@ -18,11 +18,12 @@ class _SnakeScreenState extends State<SnakeScreen> {
   final int initialSnakePosition = 45;
   final randomGen = Random();
 
-  // late Timer poisonFoodTimer;
+  late int normalFruitsEaten = snakePosition.length - initialSnakeSize;
   late Timer gameTimer;
   late int otroLado = (squaresPerRow * squaresPerCol);
   late List<int> snakePosition = List<int>.generate(
       initialSnakeSize, (i) => initialSnakePosition + (squaresPerRow * i));
+      
   int food = 855;
   int poisonFood = -1;
   String direction = 'down';
@@ -90,6 +91,7 @@ class _SnakeScreenState extends State<SnakeScreen> {
   }
 
   void updateSnake() {
+    normalFruitsEaten = snakePosition.length - initialSnakeSize;
     setState(() {
       switch (direction) {
         case 'down':
@@ -123,10 +125,26 @@ class _SnakeScreenState extends State<SnakeScreen> {
         default:
       }
 
+      // if (snakePosition.last == food) {
+      //   generateNewFood();
+      // } else {
+      //   snakePosition.removeAt(0);
+      // }
       if (snakePosition.last == food) {
+        // normalFruitsEaten++;
         generateNewFood();
+        // Cada 4 frutas normales, genera una fruta envenenada
+        if (normalFruitsEaten % 4 == 0) {
+          generatePoisonFood();
+        }
+      } else if (snakePosition.last == poisonFood) {
+        endGame();
       } else {
         snakePosition.removeAt(0);
+        // Si se han comido 2 frutas normales después de la fruta envenenada, la elimina
+        if (poisonFood != -1 && normalFruitsEaten % 2 == 0) {
+          poisonFood = -1;
+        }
       }
     });
   }
@@ -153,8 +171,7 @@ class _SnakeScreenState extends State<SnakeScreen> {
             'Game Over',
             style: TextStyle(color: Colors.red),
           ),
-          content: Text(
-              'Total Score: ${snakePosition.length - initialSnakeSize} \n Play Again?'),
+          content: Text('Total Score: $normalFruitsEaten \n Play Again?'),
           actions: <Widget>[
             TextButton(
               child: Text(
@@ -276,8 +293,7 @@ class _SnakeScreenState extends State<SnakeScreen> {
                         onTap: () => Navigator.of(context).pop(),
                         child: Text("Exit", style: textStyle),
                       ),
-                Text("Apples: ${snakePosition.length - initialSnakeSize}",
-                    style: textStyle),
+                Text("Apples: $normalFruitsEaten", style: textStyle),
               ],
             ),
           ),
