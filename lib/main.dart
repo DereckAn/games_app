@@ -16,13 +16,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // double screenWidth = MediaQuery.of(context).size.width;
-    // double screenHeight = MediaQuery.of(context).size.height;
-    // print('screenWidth: $screenWidth');
-    // print('screenHeight: $screenHeight');
-    // print(
-    //   MediaQuery.of(context).size.width ~/ 30,
-    // );
 
     return MaterialApp(
       initialRoute: '/',

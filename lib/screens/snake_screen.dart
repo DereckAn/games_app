@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:app_juegos/widgets/blocks_snake.dart';
+import 'package:app_juegos/widgets/blocks_grid.dart';
 import 'package:flutter/material.dart';
 
 class SnakeScreen extends StatefulWidget {
@@ -277,23 +277,23 @@ class _SnakeScreenState extends State<SnakeScreen> {
                   ),
                   itemBuilder: (BuildContext context, int index) {
                     if (snakePosition.contains(index)) {
-                      return const BlocksSnake(
+                      return const BlocksGrid(
                         color: Colors.green,
                       );
                     } else if (index == food) {
-                      return const BlocksSnake(
+                      return const BlocksGrid(
                         color: Colors.red,
                       );
                     } else if (index == poisonFood) {
-                      return const BlocksSnake(
+                      return const BlocksGrid(
                         color: Colors.purple,
                       );
                     } else if (index == goldenApple) {
-                      return const BlocksSnake(
+                      return const BlocksGrid(
                         color: Color.fromARGB(255, 132, 120, 8),
                       );
                     } else {
-                      return const BlocksSnake(color: Color(0xFF1D1D1D));
+                      return const BlocksGrid(color: Color(0xFF1D1D1D));
                     }
                   },
                 ),

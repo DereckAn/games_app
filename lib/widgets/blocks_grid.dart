@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class BlocksSnake extends StatelessWidget {
-  const BlocksSnake({super.key, required this.color});
+class BlocksGrid extends StatelessWidget {
+  const BlocksGrid({super.key, required this.color});
   final Color color;
 
   @override
