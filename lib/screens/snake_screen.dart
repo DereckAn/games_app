@@ -23,9 +23,11 @@ class _SnakeScreenState extends State<SnakeScreen> {
   late int otroLado = (squaresPerRow * squaresPerCol);
   late List<int> snakePosition = List<int>.generate(
       initialSnakeSize, (i) => initialSnakePosition + (squaresPerRow * i));
-      
+
   int food = 855;
+  int goldenAppleMoves = 0;
   int poisonFood = -1;
+  int goldenApple = -1;
   String direction = 'down';
   bool isGamePaused = false;
   bool isGameStarted = false;
@@ -39,8 +41,6 @@ class _SnakeScreenState extends State<SnakeScreen> {
                 index)); // & Esto es un for loop para decir lo mismo que SnakePosition en la linea 20
     direction = 'down';
     food = randomGen.nextInt(otroLado - 1);
-    // poisonFoodTimer.cancel();
-    // poisonFood = -1;
   }
 
   void startGame() {
@@ -64,7 +64,6 @@ class _SnakeScreenState extends State<SnakeScreen> {
     setState(() {
       isGamePaused = !isGamePaused;
       if (isGamePaused) {
-        // poisonFoodTimer.cancel();
         gameTimer.cancel();
       } else {
         startGame();
@@ -79,6 +78,18 @@ class _SnakeScreenState extends State<SnakeScreen> {
     }
     setState(() {
       poisonFood = newPoisonFoodPosition;
+    });
+  }
+
+  void generateGoldenApple() {
+    int newGoldenApplePosition = randomGen.nextInt(otroLado - 1);
+    while (snakePosition.contains(newGoldenApplePosition)) {
+      newGoldenApplePosition = randomGen.nextInt(otroLado - 1);
+    }
+    setState(() {
+      goldenApple = newGoldenApplePosition;
+      goldenAppleMoves =
+          0; // Reinicia el contador de movimientos cuando generas una nueva manzana dorada
     });
   }
 
@@ -125,26 +136,47 @@ class _SnakeScreenState extends State<SnakeScreen> {
         default:
       }
 
-      // if (snakePosition.last == food) {
-      //   generateNewFood();
-      // } else {
-      //   snakePosition.removeAt(0);
-      // }
       if (snakePosition.last == food) {
-        // normalFruitsEaten++;
         generateNewFood();
-        // Cada 4 frutas normales, genera una fruta envenenada
-        if (normalFruitsEaten % 4 == 0) {
+        if (normalFruitsEaten % 3 == 0) {
           generatePoisonFood();
+        }
+        if (normalFruitsEaten % 5 == 0) {
+          generateGoldenApple();
         }
       } else if (snakePosition.last == poisonFood) {
         endGame();
+      } else if (snakePosition.last == goldenApple) {
+        int valueToAdd = 0;
+        if (direction == 'down') {
+          valueToAdd = squaresPerRow;
+        } else if (direction == 'up') {
+          valueToAdd = -squaresPerRow;
+        } else if (direction == 'left') {
+          valueToAdd = -1;
+        } else if (direction == 'right') {
+          valueToAdd = 1;
+        }
+
+        for (int i = 0; i < 5; i++) {
+          snakePosition.add(snakePosition.last + valueToAdd);
+        }
+
+        goldenApple = -1;
       } else {
         snakePosition.removeAt(0);
         // Si se han comido 2 frutas normales después de la fruta envenenada, la elimina
-        if (poisonFood != -1 && normalFruitsEaten % 2 == 0) {
+        if (poisonFood != -1 && normalFruitsEaten % 3 == 0) {
           poisonFood = -1;
         }
+        // Elimina la manzana dorada después de un cierto número de movimientos o tiempo
+        if (goldenApple != -1 && goldenAppleMoves >= 40) {
+          // Cambia 10 al número de movimientos que quieras que la manzana dorada esté presente
+          goldenApple = -1;
+        }
+      }
+      if (goldenApple != -1) {
+        goldenAppleMoves++; // Incrementa el contador de movimientos si la manzana dorada está presente
       }
     });
   }
@@ -259,6 +291,10 @@ class _SnakeScreenState extends State<SnakeScreen> {
                     } else if (index == poisonFood) {
                       return const BlocksSnake(
                         color: Colors.purple,
+                      );
+                    } else if (index == goldenApple) {
+                      return const BlocksSnake(
+                        color: Color.fromARGB(255, 132, 120, 8),
                       );
                     } else {
                       return const BlocksSnake(color: Color(0xFF1D1D1D));
