@@ -71,34 +71,30 @@ class _SnakeScreenState extends State<SnakeScreen> {
     });
   }
 
-  void generatePoisonFood() {
-    int newPoisonFoodPosition = randomGen.nextInt(otroLado - 1);
-    while (snakePosition.contains(newPoisonFoodPosition)) {
-      newPoisonFoodPosition = randomGen.nextInt(otroLado - 1);
+  int generateNewPosition() {
+    int newPosition = randomGen.nextInt(otroLado - 1);
+    while (snakePosition.contains(newPosition)) {
+      newPosition = randomGen.nextInt(otroLado - 1);
     }
+    return newPosition;
+  }
+
+  void generatePoisonFood() {
     setState(() {
-      poisonFood = newPoisonFoodPosition;
+      poisonFood = generateNewPosition();
     });
   }
 
   void generateGoldenApple() {
-    int newGoldenApplePosition = randomGen.nextInt(otroLado - 1);
-    while (snakePosition.contains(newGoldenApplePosition)) {
-      newGoldenApplePosition = randomGen.nextInt(otroLado - 1);
-    }
     setState(() {
-      goldenApple = newGoldenApplePosition;
+      goldenApple = generateNewPosition();
       goldenAppleMoves =
           0; // Reinicia el contador de movimientos cuando generas una nueva manzana dorada
     });
   }
 
   void generateNewFood() {
-    int newFoodPosition = randomGen.nextInt(otroLado - 1);
-    while (snakePosition.contains(newFoodPosition)) {
-      newFoodPosition = randomGen.nextInt(otroLado - 1);
-    }
-    food = newFoodPosition;
+    food = generateNewPosition();
   }
 
   void updateSnake() {
@@ -141,7 +137,7 @@ class _SnakeScreenState extends State<SnakeScreen> {
         if (normalFruitsEaten % 3 == 0) {
           generatePoisonFood();
         }
-        if (normalFruitsEaten % 5 == 0) {
+        if (normalFruitsEaten % 7 == 0) {
           generateGoldenApple();
         }
       } else if (snakePosition.last == poisonFood) {
@@ -170,7 +166,7 @@ class _SnakeScreenState extends State<SnakeScreen> {
           poisonFood = -1;
         }
         // Elimina la manzana dorada después de un cierto número de movimientos o tiempo
-        if (goldenApple != -1 && goldenAppleMoves >= 40) {
+        if (goldenApple != -1 && goldenAppleMoves >= 30) {
           // Cambia 10 al número de movimientos que quieras que la manzana dorada esté presente
           goldenApple = -1;
         }
