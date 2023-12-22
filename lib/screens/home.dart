@@ -25,32 +25,39 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      body: const Center(
+      body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ChooseGameButtonW(
-                gameIcon: Icons.connect_without_contact_sharp,
-                gameName: 'Connect 4',
-                gameRoute: '/connect4'),
-            ChooseGameButtonW(
-                gameIcon: Icons.text_fields_rounded,
-                gameName: 'Tetris',
-                gameRoute: '/tetris'),
-            ChooseGameButtonW(
-                gameIcon: Icons.sync_alt_sharp,
-                gameName: 'Snake',
-                gameRoute: '/snake'),
-            ChooseGameButtonW(
-                gameIcon: Icons.sync_alt_sharp,
-                gameName: '2048',
-                gameRoute: '/2048'),
-            // ChooseGameButtonW(
-            //     gameIcon: Icons.sync_alt_sharp,
-            //     gameName: 'Prueba',
-            //     gameRoute: '/prueba'),
-          ],
-        ),
+  mainAxisAlignment: MainAxisAlignment.center,
+  children: <Widget>[
+    Expanded(
+      child: GridView.count(
+        crossAxisCount: 2,
+        children: const [
+          ChooseGameButtonW(
+              gameName: 'Connect 5',
+              routeSvg: 'assets/svg/connect.svg',
+              gameRoute: '/connect4'),
+          ChooseGameButtonW(
+              gameName: 'Tetris',
+              routeSvg: 'assets/svg/tetris-app-24-filled.svg',
+              gameRoute: '/tetris'),
+          ChooseGameButtonW(
+              gameName: 'Snake',
+              routeSvg: 'assets/svg/snake.svg',
+              gameRoute: '/snake'),
+          ChooseGameButtonW(
+              gameName: '2048',
+              routeSvg: 'assets/svg/2048-game.svg',
+              gameRoute: '/2048'),
+          ChooseGameButtonW(
+              gameName: 'Memory',
+              routeSvg: 'assets/svg/memory.svg',
+              gameRoute: '/memory'),
+        ],
+      ),
+    ),
+  ],
+),
       ),
     );
   }

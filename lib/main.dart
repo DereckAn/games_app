@@ -1,5 +1,6 @@
 import 'package:app_juegos/screens/connect4_screen.dart';
 import 'package:app_juegos/screens/home.dart';
+import 'package:app_juegos/screens/memory_screen.dart';
 import 'package:app_juegos/screens/screen_2048.dart';
 import 'package:app_juegos/screens/snake_screen.dart';
 import 'package:app_juegos/screens/tetris_screen.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
         '/tetris': (context) => const TetrisScreen(),
         '/snake': (context) => const SnakeScreen(),
         '/2048': (context) => const Screen2048(),
-        // '/prueba': (context) => const Prueba(),
+        '/memory': (context) => const MemoryScreen(),
       },
       title: 'Flutter Demo',
       theme: ThemeData(
