@@ -34,7 +34,7 @@ class _MyHomePageState extends State<MyHomePage> {
         crossAxisCount: 2,
         children: const [
           ChooseGameButtonW(
-              gameName: 'Connect 5',
+              gameName: 'Tic Tac Toe 5x5',
               routeSvg: 'assets/svg/connect.svg',
               gameRoute: '/connect4'),
           ChooseGameButtonW(

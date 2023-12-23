@@ -2,45 +2,51 @@ import 'package:app_juegos/constants/piece_type.dart';
 
 class Piece {
   TetriPiece type;
+  List<int> position = [];
 
   Piece({required this.type});
 
-  List<List<int>> getPiece() {
+  void initializaPiece() {
     switch (type) {
       case TetriPiece.I:
-        return [
-          [1, 1, 1, 1]
-        ];
+        position = [-39, -28, -17, -6];
+        break;
       case TetriPiece.J:
-        return [
-          [1, 0, 0],
-          [1, 1, 1]
-        ];
+        position = [-5, -6, -7, -18];
+        break;
       case TetriPiece.L:
-        return [
-          [0, 0, 1],
-          [1, 1, 1]
-        ];
+        position = [-7, -6, -5, -16];
+        break;
       case TetriPiece.O:
-        return [
-          [1, 1],
-          [1, 1]
-        ];
+        position = [-6, -5, -17, -16];
+        break;
       case TetriPiece.S:
-        return [
-          [0, 1, 1],
-          [1, 1, 0]
-        ];
+        position = [-7, -6, -17, -16];
+        break;
       case TetriPiece.T:
-        return [
-          [0, 1, 0],
-          [1, 1, 1]
-        ];
+        position = [-7, -6, -5, -17];
+        break;
       case TetriPiece.Z:
-        return [
-          [1, 1, 0],
-          [0, 1, 1]
-        ];
+        position = [-18, -17, -6, -5];
+        break;
+    }
+  }
+
+  // move piece
+  void movePiece(Direction direction) {
+    switch (direction) {
+      case Direction.left:
+        position = position.map((e) => e - 1).toList();
+        break;
+      case Direction.right:
+        position = position.map((e) => e + 1).toList();
+        break;
+      case Direction.down:
+        position = position.map((e) => e + rowLength).toList();
+        break;
+      case Direction.up:
+        position = position.map((e) => e - rowLength).toList();
+        break;
     }
   }
 }
