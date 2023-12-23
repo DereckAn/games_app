@@ -1,10 +1,13 @@
 import 'package:app_juegos/constants/piece_type.dart';
+import 'package:flutter/material.dart';
 
 class Piece {
   TetriPiece type;
   List<int> position = [];
 
   Piece({required this.type});
+
+  Color get color => tetriPieceColor[type] ?? Colors.white;
 
   void initializaPiece() {
     switch (type) {

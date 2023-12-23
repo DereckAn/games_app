@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class BlocksGrid extends StatelessWidget {
   const BlocksGrid({super.key, required this.color});
-  final Color color;
+  final Color? color;
 
   @override
   Widget build(BuildContext context) {

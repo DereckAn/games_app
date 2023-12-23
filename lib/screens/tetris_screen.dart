@@ -23,21 +23,22 @@ class TetrisScreen extends StatefulWidget {
 class _TetrisScreenState extends State<TetrisScreen> {
   // Este es el primer bloque que se dibuja en la parte superior de la pantalla
   Piece currentPiece = Piece(type: TetriPiece.Z);
+  Random random = Random();
 
-  @override
-  void initState() {
-    super.initState();
+  // @override
+  // void initState() {
+  //   super.initState();
 
-    // start the game
-    startGame();
-  }
+  //   // start the game
+  //   startGame();
+  // }
 
   void startGame() {
     //inicializar la pieza.
     currentPiece.initializaPiece();
 
     // start the timer -- frame loop
-    Duration frameRate = const Duration(milliseconds: 300); // Speed of the game
+    Duration frameRate = const Duration(milliseconds: 400); // Speed of the game
     gameLoop(frameRate);
   }
 
@@ -46,8 +47,8 @@ class _TetrisScreenState extends State<TetrisScreen> {
     // check if the piece is at the last row
     for (int i = 0; i < currentPiece.position.length; i++) {
       // Esto es para calcular la row y la col de la pieza
-      int row = currentPiece.position[i] ~/
-          rowLength; // ~/ es para redondear hacia abajo
+      int row = (currentPiece.position[i] / rowLength)
+          .floor(); // ~/ es para redondear hacia abajo
       int col = currentPiece.position[i] % rowLength;
 
       // Ajustar la posicion de la pieza
@@ -59,7 +60,11 @@ class _TetrisScreenState extends State<TetrisScreen> {
         row++;
       }
 
-      if (row >= colLength || col >= rowLength || col < 0 || (tablero[row][col] != null)) {
+      if (row < 0 ||
+          row >= colLength ||
+          col < 0 ||
+          col >= rowLength ||
+          tablero[row][col] != null) {
         return true;
       }
     }
@@ -71,8 +76,8 @@ class _TetrisScreenState extends State<TetrisScreen> {
     // este metodo es para que la nueva piesa se marque como piso. MArcaremos las casillas que ocupa como ocupadas.
     if (checkCollision(Direction.down)) {
       for (int i = 0; i < currentPiece.position.length; i++) {
-        int row = currentPiece.position[i] ~/
-            rowLength; // ~/ es para redondear hacia abajo
+        int row = (currentPiece.position[i] / rowLength)
+            .floor(); // ~/ es para redondear hacia abajo
         int col = currentPiece.position[i] % rowLength;
 
         if (row >= 0 && col >= 0) {
@@ -85,7 +90,6 @@ class _TetrisScreenState extends State<TetrisScreen> {
   }
 
   void createNewPiece() {
-    Random random = Random();
     // create a new random piece
     currentPiece = Piece(
         type: TetriPiece.values[random.nextInt(TetriPiece.values.length)]);
@@ -110,28 +114,39 @@ class _TetrisScreenState extends State<TetrisScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      body: GridView.builder(
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: rowLength * colLength,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: rowLength),
-        itemBuilder: ((context, index) {
-          int row = index ~/ rowLength;
-          int col = index % rowLength;
+      body: Column(
+        children: [
+          Expanded(
+            child: GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: rowLength * colLength,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: rowLength),
+              itemBuilder: ((context, index) {
+                int row = (index / rowLength).floor();
+                int col = index % rowLength;
 
-          //current piece
-          if (currentPiece.position.contains(index)) {
-            return const BlocksGrid(color: Colors.red);
-          } else if(tablero[row][col] != null) {
-            // landed pieces
-            return const BlocksGrid(color: Colors.blue);
-          }
-          
-          else {
-            // blank spaces
-            return const BlocksGrid(color: Color.fromRGBO(33, 33, 33, 1));
-          }
-        }),
+                //current piece
+                if (currentPiece.position.contains(index)) {
+                  return BlocksGrid(color: currentPiece.color);
+                } else if (tablero[row][col] != null) {
+                  // landed pieces
+                  final TetriPiece? type = tablero[row][col];
+                  return BlocksGrid(color: tetriPieceColor[type]);
+                } else {
+                  // blank spaces
+                  return const BlocksGrid(color: Color.fromRGBO(33, 33, 33, 1));
+                }
+              }),
+            ),
+          ),
+          TextButton(
+              onPressed: startGame,
+              child: const Text(
+                "Start",
+                style: TextStyle(color: Colors.white70),
+              ))
+        ],
       ),
     );
   }
