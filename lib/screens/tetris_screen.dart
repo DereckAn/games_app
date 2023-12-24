@@ -24,6 +24,7 @@ class _TetrisScreenState extends State<TetrisScreen> {
   // Este es el primer bloque que se dibuja en la parte superior de la pantalla
   Piece currentPiece = Piece(type: TetriPiece.Z);
   Random random = Random();
+  bool gestureProcessed = false;
 
   // @override
   // void initState() {
@@ -117,27 +118,61 @@ class _TetrisScreenState extends State<TetrisScreen> {
       body: Column(
         children: [
           Expanded(
-            child: GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: rowLength * colLength,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: rowLength),
-              itemBuilder: ((context, index) {
-                int row = (index / rowLength).floor();
-                int col = index % rowLength;
+            child: GestureDetector(
+              onHorizontalDragUpdate: (details) {
+                if (gestureProcessed) return; // Agrega esta línea
 
-                //current piece
-                if (currentPiece.position.contains(index)) {
-                  return BlocksGrid(color: currentPiece.color);
-                } else if (tablero[row][col] != null) {
-                  // landed pieces
-                  final TetriPiece? type = tablero[row][col];
-                  return BlocksGrid(color: tetriPieceColor[type]);
+                if (details.delta.dx > 0) {
+                  // move right
+                  if (!checkCollision(Direction.right)) {
+                    setState(() {
+                      currentPiece.movePiece(Direction.right);
+                      gestureProcessed = true; // Agrega esta línea
+                    });
+                  }
                 } else {
-                  // blank spaces
-                  return const BlocksGrid(color: Color.fromRGBO(33, 33, 33, 1));
+                  // move left
+                  if (!checkCollision(Direction.left)) {
+                    setState(() {
+                      currentPiece.movePiece(Direction.left);
+                      gestureProcessed = true; // Agrega esta línea
+                    });
+                  }
                 }
-              }),
+              },
+              onHorizontalDragEnd: (details) {
+                gestureProcessed = false; // Agrega esta línea
+              },
+              onVerticalDragUpdate: (details) {
+                if (!checkCollision(Direction.down)) {
+                  setState(() {
+                    currentPiece.movePiece(Direction.down);
+                  });
+                }
+              },
+
+              child: GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: rowLength * colLength,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: rowLength),
+                itemBuilder: ((context, index) {
+                  int row = (index / rowLength).floor();
+                  int col = index % rowLength;
+              
+                  //current piece
+                  if (currentPiece.position.contains(index)) {
+                    return BlocksGrid(color: currentPiece.color);
+                  } else if (tablero[row][col] != null) {
+                    // landed pieces
+                    final TetriPiece? type = tablero[row][col];
+                    return BlocksGrid(color: tetriPieceColor[type]);
+                  } else {
+                    // blank spaces
+                    return const BlocksGrid(color: Color.fromRGBO(33, 33, 33, 1));
+                  }
+                }),
+              ),
             ),
           ),
           TextButton(
