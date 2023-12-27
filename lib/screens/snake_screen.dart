@@ -195,9 +195,10 @@ class _SnakeScreenState extends State<SnakeScreen> {
       barrierDismissible: false,
       builder: (BuildContext context) {
         return GameOverDialog(
-          normalFruitsEaten: normalFruitsEaten,
           initializeGame: initializeGame,
-          startGame: startGame,);
+          points: normalFruitsEaten,
+          startGame: startGame,
+        );
       },
     );
   }

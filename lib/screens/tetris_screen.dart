@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:app_juegos/constants/piece_type.dart';
 import 'package:app_juegos/widgets/blocks_grid.dart';
+import 'package:app_juegos/widgets/game_over_dialog.dart';
 import 'package:app_juegos/widgets/tetris_piece.dart';
 import 'package:flutter/material.dart';
 
@@ -93,6 +94,10 @@ class _TetrisScreenState extends State<TetrisScreen> {
 
     // initialize the piece
     currentPiece.initializaPiece();
+
+    if (isGameOver()) {
+      gameOver = true;
+    }
   }
 
   void gameLoop(Duration frameRate) {
@@ -107,6 +112,13 @@ class _TetrisScreenState extends State<TetrisScreen> {
         if (gameOver) {
           timer.cancel();
           // showGameOverDialog();
+          showDialog(
+              context: context,
+              builder: (context) {
+                return GameOverDialog(
+                    points: score,
+                    startGame: startGame);
+              });
           return;
         }
         // move the piece down
@@ -123,7 +135,6 @@ class _TetrisScreenState extends State<TetrisScreen> {
 
   void clearLine() {
     int linesCleared = 0;
-
     tablero.removeWhere((List<TetriPiece?> row) {
       if (row.every((TetriPiece? cell) => cell != null)) {
         linesCleared++;
@@ -131,23 +142,25 @@ class _TetrisScreenState extends State<TetrisScreen> {
       }
       return false;
     });
-
     while (tablero.length < colLength) {
       tablero.insert(0, List<TetriPiece?>.filled(rowLength, null));
     }
-
     // Scoring lookup table
     const scores = [0, 40, 100, 300, 1200];
     score += scores[linesCleared];
   }
 
+  // bool isGameOver() {
+  //   for (int i = 0; i < rowLength; i++) {
+  //     if (tablero[0][i] != null) {
+  //       return true;
+  //     }
+  //   }
+  //   return false;
+  // }
+
   bool isGameOver() {
-    for (int i = 0; i < rowLength; i++) {
-      if (tablero[0][i] != null) {
-        return true;
-      }
-    }
-    return false;
+    return tablero[0].any((cell) => cell != null);
   }
 
   @override
@@ -233,11 +246,18 @@ class _TetrisScreenState extends State<TetrisScreen> {
             ),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton(
                   onPressed: startGame,
                   child: const Text(
                     "Start",
+                    style: TextStyle(color: Colors.white70),
+                  )),
+              TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text(
+                    "Exit",
                     style: TextStyle(color: Colors.white70),
                   )),
               Text(

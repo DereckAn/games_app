@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class GameOverDialog extends StatelessWidget {
   const GameOverDialog({
-    super.key,
-    required this.normalFruitsEaten,
-    required this.initializeGame,
+    Key? key,
+    this.points = 0,
     required this.startGame,
-  });
+    this.initializeGame,
+  }) : super(key: key);
 
-  final int normalFruitsEaten;
-  final Function initializeGame;
+  final int? points;
+  final Function? initializeGame;
   final Function startGame;
 
   @override
@@ -20,7 +20,7 @@ class GameOverDialog extends StatelessWidget {
         'Game Over',
         style: TextStyle(color: Colors.red),
       ),
-      content: Text('Total Score: $normalFruitsEaten \n Play Again?'),
+      content: Text('Total Score: $points \n Play Again?'),
       actions: <Widget>[
         TextButton(
           child: Text(
@@ -28,7 +28,7 @@ class GameOverDialog extends StatelessWidget {
             style: TextStyle(color: Theme.of(context).colorScheme.secondary),
           ),
           onPressed: () {
-            initializeGame();
+            initializeGame?.call();
             startGame();
             Navigator.of(context).pop();
           },
