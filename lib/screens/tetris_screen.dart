@@ -66,7 +66,6 @@ class _TetrisScreenState extends State<TetrisScreen> {
         return true;
       }
     }
-
     return false;
   }
 
@@ -85,6 +84,14 @@ class _TetrisScreenState extends State<TetrisScreen> {
       // Una vez que cae la pieza, crearemos otra.
       createNewPiece();
     }
+  }
+
+  void resetGame() {
+    // reset the game
+    tablero = List.generate(colLength, (i) => List.generate(rowLength, (j) => null));
+    gameOver = false;
+    score = 0;
+    startGame();
   }
 
   void createNewPiece() {
@@ -117,7 +124,7 @@ class _TetrisScreenState extends State<TetrisScreen> {
               builder: (context) {
                 return GameOverDialog(
                     points: score,
-                    startGame: startGame);
+                    startGame: resetGame);
               });
           return;
         }

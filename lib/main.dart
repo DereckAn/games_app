@@ -1,3 +1,4 @@
+import 'package:app_juegos/screens/color_switch_screen.dart';
 import 'package:app_juegos/screens/connect4_screen.dart';
 import 'package:app_juegos/screens/home.dart';
 import 'package:app_juegos/screens/memory_screen.dart';
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         '/snake': (context) => const SnakeScreen(),
         '/2048': (context) => const Screen2048(),
         '/memory': (context) => const MemoryScreen(),
+        'colorswitch': (context) => const ColorSwitcherScreen(),
       },
       title: 'Flutter Demo',
       theme: ThemeData(
