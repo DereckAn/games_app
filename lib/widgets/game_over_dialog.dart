@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
 class GameOverDialog extends StatelessWidget {
-  final int normalFruitsEaten;
-  final Function initializeGame;
-  final Function startGame;
-
   const GameOverDialog({
     super.key,
     required this.normalFruitsEaten,
     required this.initializeGame,
     required this.startGame,
   });
+
+  final int normalFruitsEaten;
+  final Function initializeGame;
+  final Function startGame;
 
   @override
   Widget build(BuildContext context) {

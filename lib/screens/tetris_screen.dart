@@ -7,8 +7,8 @@ import 'package:app_juegos/widgets/tetris_piece.dart';
 import 'package:flutter/material.dart';
 
 // Entonces, en resumen, este código está creando una lista bidimensional de TetriPiece?
-//de tamaño colLength x rowLength, donde cada elemento es inicialmente null. Esto podría representar, por ejemplo,
-//un tablero de juego para un juego de Tetris, donde null representa un espacio vacío.
+// de tamaño colLength x rowLength, donde cada elemento es inicialmente null. Esto podría representar, por ejemplo,
+// un tablero de juego para un juego de Tetris, donde null representa un espacio vacío.
 // This will help us to keep track of the landing pieces
 List<List<TetriPiece?>> tablero =
     List.generate(colLength, (i) => List.generate(rowLength, (j) => null));
@@ -104,7 +104,7 @@ class _TetrisScreenState extends State<TetrisScreen> {
         // check for landing
         checkFloor();
 
-        if(gameOver) {
+        if (gameOver) {
           timer.cancel();
           // showGameOverDialog();
           return;

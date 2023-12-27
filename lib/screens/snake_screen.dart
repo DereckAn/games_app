@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:app_juegos/widgets/blocks_grid.dart';
+import 'package:app_juegos/widgets/game_over_dialog.dart';
 import 'package:flutter/material.dart';
 
 class SnakeScreen extends StatefulWidget {
@@ -193,39 +194,10 @@ class _SnakeScreenState extends State<SnakeScreen> {
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Theme.of(context).colorScheme.primary,
-          title: const Text(
-            'Game Over',
-            style: TextStyle(color: Colors.red),
-          ),
-          content: Text('Total Score: $normalFruitsEaten \n Play Again?'),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                'Yes',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.secondary),
-              ),
-              onPressed: () {
-                initializeGame();
-                startGame();
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text(
-                'No',
-                style:
-                    TextStyle(color: Theme.of(context).colorScheme.secondary),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
+        return GameOverDialog(
+          normalFruitsEaten: normalFruitsEaten,
+          initializeGame: initializeGame,
+          startGame: startGame,);
       },
     );
   }
