@@ -98,13 +98,13 @@ class Piece {
       ],
     };
 
+      rotationState = (rotationState + 1) % rotationStates[type]!.length;
+      position = rotationStates[type]![rotationState];
 
     // todo Arreglar que las piezas se pasen al otro lado de la pantalla
     
-    if (pieceValidPosition(rotationStates[type]![rotationState])) {
-      rotationState = (rotationState + 1) % rotationStates[type]!.length;
-      position = rotationStates[type]![rotationState];
-    }
+    // if (pieceValidPosition(rotationStates[type]![rotationState])) {
+    // }
   }
 
   bool validRotation(int position) {

@@ -27,6 +27,7 @@ class _TetrisScreenState extends State<TetrisScreen> {
   bool gestureProcessed = false;
   bool rotateProcessed = false;
   bool gestureInProgress = false;
+  bool gameOver = false;
   int score = 0;
 
   void startGame() {
@@ -98,11 +99,16 @@ class _TetrisScreenState extends State<TetrisScreen> {
     Timer.periodic(frameRate, (timer) {
       // update the state of the game
       setState(() {
-
         // clear the line
         clearLine();
         // check for landing
         checkFloor();
+
+        if(gameOver) {
+          timer.cancel();
+          // showGameOverDialog();
+          return;
+        }
         // move the piece down
         currentPiece.movePiece(Direction.down);
       });
@@ -115,26 +121,33 @@ class _TetrisScreenState extends State<TetrisScreen> {
     });
   }
 
-  void clearLine(){
-    // check if the line is full
-    for(int i = 0; i < colLength; i++){
-      bool isFull = true;
-      for(int j = 0; j < rowLength; j++){
-        if(tablero[i][j] == null){
-          isFull = false;
-          break;
-        }
+  void clearLine() {
+    int linesCleared = 0;
+
+    tablero.removeWhere((List<TetriPiece?> row) {
+      if (row.every((TetriPiece? cell) => cell != null)) {
+        linesCleared++;
+        return true;
       }
-      if(isFull){
-        // clear the line
-        for(int k = i; k > 0; k--){
-          for(int l = 0; l < rowLength; l++){
-            tablero[k][l] = tablero[k-1][l];
-            score++;
-          }
-        }
+      return false;
+    });
+
+    while (tablero.length < colLength) {
+      tablero.insert(0, List<TetriPiece?>.filled(rowLength, null));
+    }
+
+    // Scoring lookup table
+    const scores = [0, 40, 100, 300, 1200];
+    score += scores[linesCleared];
+  }
+
+  bool isGameOver() {
+    for (int i = 0; i < rowLength; i++) {
+      if (tablero[0][i] != null) {
+        return true;
       }
     }
+    return false;
   }
 
   @override
@@ -219,12 +232,20 @@ class _TetrisScreenState extends State<TetrisScreen> {
               ),
             ),
           ),
-          TextButton(
-              onPressed: startGame,
-              child: const Text(
-                "Start",
-                style: TextStyle(color: Colors.white70),
-              ))
+          Row(
+            children: [
+              TextButton(
+                  onPressed: startGame,
+                  child: const Text(
+                    "Start",
+                    style: TextStyle(color: Colors.white70),
+                  )),
+              Text(
+                "Score: $score",
+                style: const TextStyle(color: Colors.white70),
+              )
+            ],
+          )
         ],
       ),
     );
