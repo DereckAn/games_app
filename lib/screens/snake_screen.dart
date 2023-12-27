@@ -25,9 +25,9 @@ class _SnakeScreenState extends State<SnakeScreen> {
       initialSnakeSize, (i) => initialSnakePosition + (squaresPerRow * i));
 
   int food = 855;
-  int goldenAppleMoves = 0;
   int poisonFood = -1;
   int goldenApple = -1;
+  int goldenAppleMoves = 0;
   String direction = 'down';
   bool isGamePaused = false;
   bool isGameStarted = false;

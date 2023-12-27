@@ -22,9 +22,10 @@ class TetrisScreen extends StatefulWidget {
 
 class _TetrisScreenState extends State<TetrisScreen> {
   // Este es el primer bloque que se dibuja en la parte superior de la pantalla
-  Piece currentPiece = Piece(type: TetriPiece.Z);
+  Piece currentPiece = Piece(type: TetriPiece.I);
   Random random = Random();
   bool gestureProcessed = false;
+  bool rotateProcessed = false;
 
   // @override
   // void initState() {
@@ -111,6 +112,12 @@ class _TetrisScreenState extends State<TetrisScreen> {
     });
   }
 
+  void rotatePiece() {
+    setState(() {
+      currentPiece.rotation();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -120,14 +127,14 @@ class _TetrisScreenState extends State<TetrisScreen> {
           Expanded(
             child: GestureDetector(
               onHorizontalDragUpdate: (details) {
-                if (gestureProcessed) return; // Agrega esta línea
+                if (gestureProcessed) return;
 
                 if (details.delta.dx > 0) {
                   // move right
                   if (!checkCollision(Direction.right)) {
                     setState(() {
                       currentPiece.movePiece(Direction.right);
-                      gestureProcessed = true; // Agrega esta línea
+                      gestureProcessed = true;
                     });
                   }
                 } else {
@@ -135,22 +142,33 @@ class _TetrisScreenState extends State<TetrisScreen> {
                   if (!checkCollision(Direction.left)) {
                     setState(() {
                       currentPiece.movePiece(Direction.left);
-                      gestureProcessed = true; // Agrega esta línea
+                      gestureProcessed = true;
                     });
                   }
                 }
               },
               onHorizontalDragEnd: (details) {
-                gestureProcessed = false; // Agrega esta línea
+                gestureProcessed = false;
               },
               onVerticalDragUpdate: (details) {
-                if (!checkCollision(Direction.down)) {
-                  setState(() {
-                    currentPiece.movePiece(Direction.down);
-                  });
+                if (details.delta.dy > 0) {
+                  // Mover la pieza hacia abajo hasta que colisione
+                  while (!checkCollision(Direction.down)) {
+                    setState(() {
+                      currentPiece.movePiece(Direction.down);
+                    });
+                  }
+                } else {
+                  // Rotar la pieza solo una vez por gesto
+                  if (!rotateProcessed) {
+                    rotatePiece();
+                    rotateProcessed = true;
+                  }
                 }
               },
-
+              onVerticalDragEnd: (details) {
+                rotateProcessed = false;
+              },
               child: GridView.builder(
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: rowLength * colLength,
@@ -159,7 +177,7 @@ class _TetrisScreenState extends State<TetrisScreen> {
                 itemBuilder: ((context, index) {
                   int row = (index / rowLength).floor();
                   int col = index % rowLength;
-              
+
                   //current piece
                   if (currentPiece.position.contains(index)) {
                     return BlocksGrid(color: currentPiece.color);
@@ -169,7 +187,8 @@ class _TetrisScreenState extends State<TetrisScreen> {
                     return BlocksGrid(color: tetriPieceColor[type]);
                   } else {
                     // blank spaces
-                    return const BlocksGrid(color: Color.fromRGBO(33, 33, 33, 1));
+                    return const BlocksGrid(
+                        color: Color.fromRGBO(33, 33, 33, 1));
                   }
                 }),
               ),
