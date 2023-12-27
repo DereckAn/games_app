@@ -22,18 +22,11 @@ class TetrisScreen extends StatefulWidget {
 
 class _TetrisScreenState extends State<TetrisScreen> {
   // Este es el primer bloque que se dibuja en la parte superior de la pantalla
-  Piece currentPiece = Piece(type: TetriPiece.I);
+  Piece currentPiece = Piece(type: TetriPiece.L);
   Random random = Random();
   bool gestureProcessed = false;
   bool rotateProcessed = false;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-
-  //   // start the game
-  //   startGame();
-  // }
+  bool gestureInProgress = false;
 
   void startGame() {
     //inicializar la pieza.
@@ -127,7 +120,8 @@ class _TetrisScreenState extends State<TetrisScreen> {
           Expanded(
             child: GestureDetector(
               onHorizontalDragUpdate: (details) {
-                if (gestureProcessed) return;
+                if (gestureProcessed || gestureInProgress) return;
+                gestureInProgress = true;
 
                 if (details.delta.dx > 0) {
                   // move right
@@ -149,8 +143,12 @@ class _TetrisScreenState extends State<TetrisScreen> {
               },
               onHorizontalDragEnd: (details) {
                 gestureProcessed = false;
+                gestureInProgress = false;
               },
               onVerticalDragUpdate: (details) {
+                if (gestureInProgress) return;
+                gestureInProgress = true;
+
                 if (details.delta.dy > 0) {
                   // Mover la pieza hacia abajo hasta que colisione
                   while (!checkCollision(Direction.down)) {
@@ -168,6 +166,7 @@ class _TetrisScreenState extends State<TetrisScreen> {
               },
               onVerticalDragEnd: (details) {
                 rotateProcessed = false;
+                gestureInProgress = false;
               },
               child: GridView.builder(
                 physics: const NeverScrollableScrollPhysics(),

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class Piece {
   TetriPiece type;
   List<int> position = [];
+  int rotationState = 1;
 
   Piece({required this.type});
 
@@ -54,9 +55,12 @@ class Piece {
   }
 
   // rotate piece
-  int rotationState = 1;
+
   void rotation() {
     int pivot = position[1];
+    if (type == TetriPiece.O) {
+      return; // Skip rotation for O piece
+    }
     Map<TetriPiece, List<List<int>>> rotationStates = {
       TetriPiece.I: [
         [pivot - 1, pivot, pivot + 1, pivot + 2],
@@ -71,7 +75,7 @@ class Piece {
       TetriPiece.L: [
         [pivot - 1, pivot, pivot + 1, pivot + 1 + rowLength],
         [pivot - rowLength, pivot, pivot + rowLength, pivot + rowLength + 1],
-        [pivot + 1, pivot, pivot - 1, pivot - 1 - rowLength],
+        [pivot + 1, pivot, pivot - 1, pivot - 1 + rowLength],
         [pivot + rowLength, pivot, pivot - rowLength, pivot - rowLength - 1]
       ],
       TetriPiece.O: [
@@ -82,7 +86,7 @@ class Piece {
         [pivot - rowLength, pivot, pivot + 1, pivot + rowLength + 1]
       ],
       TetriPiece.T: [
-        [pivot - 1, pivot, pivot + 1, pivot + rowLength],
+        [pivot - 1, pivot, pivot + 1, pivot - rowLength],
         [pivot - rowLength, pivot, pivot + 1, pivot + rowLength],
         [pivot - 1, pivot, pivot + 1, pivot + rowLength],
         [pivot - rowLength, pivot, pivot - 1, pivot + rowLength]
@@ -92,7 +96,6 @@ class Piece {
         [pivot + rowLength, pivot, pivot + 1, pivot + 1 - rowLength]
       ],
     };
-
     position = rotationStates[type]![rotationState];
     rotationState = (rotationState + 1) % rotationStates[type]!.length;
   }
