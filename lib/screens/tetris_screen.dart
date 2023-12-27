@@ -27,6 +27,7 @@ class _TetrisScreenState extends State<TetrisScreen> {
   bool gestureProcessed = false;
   bool rotateProcessed = false;
   bool gestureInProgress = false;
+  int score = 0;
 
   void startGame() {
     //inicializar la pieza.
@@ -97,6 +98,9 @@ class _TetrisScreenState extends State<TetrisScreen> {
     Timer.periodic(frameRate, (timer) {
       // update the state of the game
       setState(() {
+
+        // clear the line
+        clearLine();
         // check for landing
         checkFloor();
         // move the piece down
@@ -109,6 +113,28 @@ class _TetrisScreenState extends State<TetrisScreen> {
     setState(() {
       currentPiece.rotation();
     });
+  }
+
+  void clearLine(){
+    // check if the line is full
+    for(int i = 0; i < colLength; i++){
+      bool isFull = true;
+      for(int j = 0; j < rowLength; j++){
+        if(tablero[i][j] == null){
+          isFull = false;
+          break;
+        }
+      }
+      if(isFull){
+        // clear the line
+        for(int k = i; k > 0; k--){
+          for(int l = 0; l < rowLength; l++){
+            tablero[k][l] = tablero[k-1][l];
+            score++;
+          }
+        }
+      }
+    }
   }
 
   @override

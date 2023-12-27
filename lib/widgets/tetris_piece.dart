@@ -1,4 +1,5 @@
 import 'package:app_juegos/constants/piece_type.dart';
+import 'package:app_juegos/screens/tetris_screen.dart';
 import 'package:flutter/material.dart';
 
 class Piece {
@@ -96,7 +97,42 @@ class Piece {
         [pivot + rowLength, pivot, pivot + 1, pivot + 1 - rowLength]
       ],
     };
-    position = rotationStates[type]![rotationState];
-    rotationState = (rotationState + 1) % rotationStates[type]!.length;
+
+
+    // todo Arreglar que las piezas se pasen al otro lado de la pantalla
+    
+    if (pieceValidPosition(rotationStates[type]![rotationState])) {
+      rotationState = (rotationState + 1) % rotationStates[type]!.length;
+      position = rotationStates[type]![rotationState];
+    }
+  }
+
+  bool validRotation(int position) {
+    int row = (position ~/ rowLength);
+    int col = position % rowLength;
+    if (row < 0 || col < 0 || tablero[row][col] != null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  bool pieceValidPosition(List<int> position) {
+    bool colOc = false;
+    bool lasOc = false;
+
+    for (int i in position) {
+      if (!validRotation(i)) {
+        return false;
+      }
+      int col = i % rowLength;
+      if (col == 0) {
+        colOc = true;
+      }
+      if (col == rowLength - 1) {
+        lasOc = true;
+      }
+    }
+    return !(colOc && lasOc);
   }
 }
