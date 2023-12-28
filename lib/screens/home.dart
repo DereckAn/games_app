@@ -15,16 +15,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primary,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(20.0), // here the desired height
-        child: AppBar(
-          backgroundColor: Theme.of(context).colorScheme.onPrimary,
-          title: Text(
-            widget.title,
-            style: const TextStyle(fontSize: 20.0),
-          ),
-        ),
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -54,8 +44,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       routeSvg: 'assets/svg/memory.svg',
                       gameRoute: '/memory'),
                   ChooseGameButtonW(
-                      gameName: 'Color Switcn',
-                      routeSvg: 'assets/svg/memory.svg',
+                      gameName: 'Color Switch',
+                      routeSvg: 'assets/svg/slack.svg',
                       gameRoute: '/colorswitch'),
                 ],
               ),

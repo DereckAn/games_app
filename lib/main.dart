@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         '/snake': (context) => const SnakeScreen(),
         '/2048': (context) => const Screen2048(),
         '/memory': (context) => const MemoryScreen(),
-        'colorswitch': (context) => const ColorSwitcherScreen(),
+        '/colorswitch': (context) => const ColorSwitcherScreen(),
       },
       title: 'Flutter Demo',
       theme: ThemeData(

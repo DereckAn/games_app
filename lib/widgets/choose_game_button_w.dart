@@ -33,10 +33,15 @@ class ChooseGameButtonW extends StatelessWidget {
                 minHeight: 0.0,
                 maxWidth: double.infinity,
                 maxHeight: double.infinity,
-                child: SvgPicture.asset(
-                  routeSvg,
-                  fit: BoxFit.fill,
-                  width: 200,
+                child: Transform.rotate(
+                  angle: -15 * 3.1416 / 180, // Convert degrees to radians
+                  child: SvgPicture.asset(
+                    routeSvg,
+                    fit: BoxFit.fill,
+                    width: 222,
+                    semanticsLabel: 'Color Switch SVG',
+                    colorFilter: null,
+                  ),
                 ),
               ),
             ),

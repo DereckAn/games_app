@@ -20,7 +20,7 @@ class Piece {
         position = [-18, -7, -6, -5];
         break;
       case TetriPiece.L:
-        position = [-7, -6, -5, -16];
+        position = [-6, -5, -7, -16];
         break;
       case TetriPiece.O:
         position = [-17, -16, -6, -5];
@@ -59,50 +59,51 @@ class Piece {
 
   void rotation() {
     int pivot = position[1];
+
     if (type == TetriPiece.O) {
       return; // Skip rotation for O piece
     }
+
     Map<TetriPiece, List<List<int>>> rotationStates = {
       TetriPiece.I: [
-        [pivot - 1, pivot, pivot + 1, pivot + 2],
-        [pivot - rowLength, pivot, pivot + rowLength, pivot + (2 * rowLength)]
+        [pivot - rowLength, pivot, pivot + rowLength, pivot + (2 * rowLength)],
+        [pivot - 1, pivot, pivot + 1, pivot + 2]
       ],
       TetriPiece.J: [
-        [pivot - rowLength, pivot, pivot + 1, pivot + 2],
         [pivot + 1, pivot, pivot + rowLength, pivot + (rowLength * 2)],
         [pivot + rowLength, pivot, pivot - 1, pivot - 2],
-        [pivot - 1, pivot, pivot - rowLength, pivot - (rowLength * 2)]
+        [pivot - 1, pivot, pivot - rowLength, pivot - (rowLength * 2)],
+        [pivot - rowLength, pivot, pivot + 1, pivot + 2]
       ],
       TetriPiece.L: [
-        [pivot - 1, pivot, pivot + 1, pivot + 1 + rowLength],
-        [pivot - rowLength, pivot, pivot + rowLength, pivot + rowLength + 1],
-        [pivot + 1, pivot, pivot - 1, pivot - 1 + rowLength],
-        [pivot + rowLength, pivot, pivot - rowLength, pivot - rowLength - 1]
+        [pivot + 1, pivot, pivot - rowLength, pivot - (rowLength * 2)],
+        [pivot + rowLength, pivot, pivot + 1, pivot + 2],
+        [pivot - 1, pivot, pivot + rowLength, pivot + (rowLength * 2) ],
+        [pivot - rowLength, pivot, pivot - 1, pivot - 2],
       ],
       TetriPiece.O: [
         [pivot - 1, pivot, pivot - rowLength, pivot - rowLength - 1]
       ],
       TetriPiece.S: [
-        [pivot + 1, pivot, pivot + rowLength - 1, pivot + rowLength],
-        [pivot - rowLength, pivot, pivot + 1, pivot + rowLength + 1]
+        [pivot - rowLength, pivot, pivot + 1, pivot + rowLength + 1],
+        [pivot + 1, pivot, pivot + rowLength - 1, pivot + rowLength]
       ],
       TetriPiece.T: [
-        [pivot - 1, pivot, pivot + 1, pivot - rowLength],
         [pivot - rowLength, pivot, pivot + 1, pivot + rowLength],
         [pivot - 1, pivot, pivot + 1, pivot + rowLength],
-        [pivot - rowLength, pivot, pivot - 1, pivot + rowLength]
+        [pivot - rowLength, pivot, pivot - 1, pivot + rowLength],
+        [pivot - 1, pivot, pivot + 1, pivot - rowLength]
       ],
       TetriPiece.Z: [
-        [pivot - 1, pivot, pivot + rowLength, pivot + rowLength + 1],
-        [pivot + rowLength, pivot, pivot + 1, pivot + 1 - rowLength]
+        [pivot + rowLength, pivot, pivot + 1, pivot + 1 - rowLength],
+        [pivot - 1, pivot, pivot + rowLength, pivot + rowLength + 1]
       ],
     };
+    rotationState = (rotationState + 1) % rotationStates[type]!.length;
 
-      rotationState = (rotationState + 1) % rotationStates[type]!.length;
-      position = rotationStates[type]![rotationState];
-
+    position = rotationStates[type]![rotationState];
     // todo Arreglar que las piezas se pasen al otro lado de la pantalla
-    
+
     // if (pieceValidPosition(rotationStates[type]![rotationState])) {
     // }
   }

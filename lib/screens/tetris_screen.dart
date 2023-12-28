@@ -23,7 +23,7 @@ class TetrisScreen extends StatefulWidget {
 
 class _TetrisScreenState extends State<TetrisScreen> {
   // Este es el primer bloque que se dibuja en la parte superior de la pantalla
-  Piece currentPiece = Piece(type: TetriPiece.L);
+  Piece currentPiece = Piece(type: TetriPiece.J);
   Random random = Random();
   bool gestureProcessed = false;
   bool rotateProcessed = false;
@@ -156,15 +156,6 @@ class _TetrisScreenState extends State<TetrisScreen> {
     const scores = [0, 40, 100, 300, 1200];
     score += scores[linesCleared];
   }
-
-  // bool isGameOver() {
-  //   for (int i = 0; i < rowLength; i++) {
-  //     if (tablero[0][i] != null) {
-  //       return true;
-  //     }
-  //   }
-  //   return false;
-  // }
 
   bool isGameOver() {
     return tablero[0].any((cell) => cell != null);
