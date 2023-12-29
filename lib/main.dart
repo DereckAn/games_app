@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
         colorScheme: const ColorScheme.dark(
           primary: Color.fromARGB(255, 23, 23, 23),
           secondary: Colors.blue,
-          surface: Colors.blue,
+          surface: Color.fromRGBO(33, 33, 33, 1),
           background: Colors.blue,
         ),
         useMaterial3: true,

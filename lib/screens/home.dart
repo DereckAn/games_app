@@ -11,6 +11,27 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final games = const [
+    {
+      'name': 'Tic Tac Toe 5x5',
+      'svg': 'assets/svg/connect.svg',
+      'route': '/connect4'
+    },
+    {
+      'name': 'Tetris',
+      'svg': 'assets/svg/tetris-app-24-filled.svg',
+      'route': '/tetris'
+    },
+    {'name': 'Snake', 'svg': 'assets/svg/snake.svg', 'route': '/snake'},
+    {'name': '2048', 'svg': 'assets/svg/2048-game.svg', 'route': '/2048'},
+    {'name': 'Memory', 'svg': 'assets/svg/memory.svg', 'route': '/memory'},
+    {
+      'name': 'Color Switch',
+      'svg': 'assets/svg/slack.svg',
+      'route': '/colorswitch'
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,32 +43,20 @@ class _MyHomePageState extends State<MyHomePage> {
             Expanded(
               child: GridView.count(
                 crossAxisCount: 2,
-                children: const [
-                  ChooseGameButtonW(
-                      gameName: 'Tic Tac Toe 5x5',
-                      routeSvg: 'assets/svg/connect.svg',
-                      gameRoute: '/connect4'),
-                  ChooseGameButtonW(
-                      gameName: 'Tetris',
-                      routeSvg: 'assets/svg/tetris-app-24-filled.svg',
-                      gameRoute: '/tetris'),
-                  ChooseGameButtonW(
-                      gameName: 'Snake',
-                      routeSvg: 'assets/svg/snake.svg',
-                      gameRoute: '/snake'),
-                  ChooseGameButtonW(
-                      gameName: '2048',
-                      routeSvg: 'assets/svg/2048-game.svg',
-                      gameRoute: '/2048'),
-                  ChooseGameButtonW(
-                      gameName: 'Memory',
-                      routeSvg: 'assets/svg/memory.svg',
-                      gameRoute: '/memory'),
-                  ChooseGameButtonW(
-                      gameName: 'Color Switch',
-                      routeSvg: 'assets/svg/slack.svg',
-                      gameRoute: '/colorswitch'),
-                ],
+                children: games.map((game) {
+                  final name = game['name'];
+                  final svg = game['svg'];
+                  final route = game['route'];
+                  if (name != null && svg != null && route != null) {
+                    return ChooseGameButtonW(
+                      gameName: name,
+                      routeSvg: svg,
+                      gameRoute: route,
+                    );
+                  } else {
+                    throw Exception('Missing game data');
+                  }
+                }).toList(),
               ),
             ),
           ],
