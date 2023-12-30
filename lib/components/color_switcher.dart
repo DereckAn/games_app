@@ -1,5 +1,6 @@
 import 'package:app_juegos/components/blue_ball_player.dart';
 import 'package:app_juegos/components/ground.dart';
+import 'package:app_juegos/components/rotator_circular.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -24,7 +25,10 @@ class MyGame extends FlameGame with TapCallbacks {
   @override
   void onMount() {
     world.add(Ground(position: Vector2(0, 400)));
+
     world.add(myPlayer = Player());
+
+    addCicularObstacles();
     // camera.follow(myPlayer);
 
 
@@ -53,6 +57,10 @@ class MyGame extends FlameGame with TapCallbacks {
       camera.viewfinder.position = Vector2(0, playerY);
     }
     super.update(dt);
+  }
+  
+  void addCicularObstacles() {
+    world.add(CircleRotator(position: Vector2(0, 200), size: Vector2(100, 100)));
   }
 }
 
