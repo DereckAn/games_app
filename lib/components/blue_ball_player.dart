@@ -1,12 +1,10 @@
+import 'package:app_juegos/components/color_switcher.dart';
+import 'package:app_juegos/components/ground.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
-
-class Player extends PositionComponent {
-
-  Player({
-    this.playerSize = 20
-  });
+class Player extends PositionComponent with HasGameRef<MyGame> {
+  Player({this.playerSize = 20});
 
   final velocity = Vector2.zero();
   final double gravity = 980.0;
@@ -16,7 +14,7 @@ class Player extends PositionComponent {
   @override
   void onMount() {
     position = Vector2.zero();
-    size = Vector2.all(playerSize*2);
+    size = Vector2.all(playerSize * 2);
     anchor = Anchor.center;
     debugMode = true;
     super.onMount();
@@ -30,6 +28,13 @@ class Player extends PositionComponent {
     // Esta función se llama cada vez que se actualiza el juego (60 veces por segundo) FPS
     super.update(dt);
     position += velocity * dt;
+
+    Ground ground = gameRef.findByKeyName(Ground.groundName)!;
+    if (position.y > ground.position.y) {
+      velocity.setValues(0, 0);
+      position = ground.position - (size / 2);
+    }
+
     velocity.y += gravity * dt;
   }
 
@@ -37,7 +42,7 @@ class Player extends PositionComponent {
   void render(Canvas canvas) {
     // Esta función se llama cada vez que se actualiza el juego (60 veces por segundo) FPS
     super.render(canvas);
-    canvas.drawCircle((size/2).toOffset(), playerSize,
+    canvas.drawCircle((size / 2).toOffset(), playerSize,
         Paint()..color = const Color.fromARGB(255, 39, 206, 212));
     //Paint paint = Paint();
     // paint.color = const Color.fromARGB(255, 39, 206, 212);

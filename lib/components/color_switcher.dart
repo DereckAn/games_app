@@ -1,4 +1,5 @@
 import 'package:app_juegos/components/blue_ball_player.dart';
+import 'package:app_juegos/components/ground.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -22,6 +23,7 @@ class MyGame extends FlameGame with TapCallbacks {
 
   @override
   void onMount() {
+    world.add(Ground(position: Vector2(0, 400)));
     world.add(myPlayer = Player());
     // camera.follow(myPlayer);
 
