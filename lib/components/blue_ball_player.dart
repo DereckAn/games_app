@@ -30,12 +30,12 @@ class Player extends PositionComponent with HasGameRef<MyGame> {
     position += velocity * dt;
 
     Ground ground = gameRef.findByKeyName(Ground.groundName)!;
-    if (position.y > ground.position.y) {
+    if (positionOfAnchor(Anchor.bottomCenter).y > ground.position.y) {
       velocity.setValues(0, 0);
-      position = ground.position - (size / 2);
+      position = Vector2(0, ground.position.y - playerSize);
+    } else {
+      velocity.y += gravity * dt;
     }
-
-    velocity.y += gravity * dt;
   }
 
   @override
