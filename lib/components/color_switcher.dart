@@ -9,7 +9,25 @@ import 'package:flutter/material.dart';
 class MyGame extends FlameGame with TapCallbacks {
   late Player myPlayer;
 
-  MyGame()
+  final List<Color> colors;
+  MyGame(
+      {this.colors = const [
+        Colors.blue,
+        Colors.red,
+        Colors.green,
+        Colors.yellow,
+        Colors.purple,
+        Colors.orange,
+        Colors.pink,
+        Colors.teal,
+        Colors.cyan,
+        Colors.lime,
+        Colors.amber,
+        Colors.indigo,
+        Colors.brown,
+        Colors.grey,
+        Colors.blueGrey,
+      ]})
       : super(
           camera: CameraComponent.withFixedResolution(
             width: 600,
@@ -26,18 +44,16 @@ class MyGame extends FlameGame with TapCallbacks {
   void onMount() {
     world.add(Ground(position: Vector2(0, 400)));
 
-    world.add(myPlayer = Player());
+    world.add(myPlayer = Player(position: Vector2(0, 200)));
+    debugMode = true;
 
     addCicularObstacles();
-    // camera.follow(myPlayer);
-
 
     world.add(RectangleComponent()
       ..position = Vector2(100, 100)
       ..size = Vector2(100, 100)
       ..anchor = Anchor.center
-      ..angle = 45
-      );
+      ..angle = 45);
     super.onMount();
   }
 
@@ -52,15 +68,14 @@ class MyGame extends FlameGame with TapCallbacks {
     final cameraY = camera.viewfinder.position.y;
     final playerY = myPlayer.position.y;
 
-
-    if(playerY < cameraY) {
+    if (playerY < cameraY) {
       camera.viewfinder.position = Vector2(0, playerY);
     }
     super.update(dt);
   }
-  
+
   void addCicularObstacles() {
-    world.add(CircleRotator(position: Vector2(0, 200), size: Vector2(100, 100)));
+    world
+        .add(CircleRotator(position: Vector2(0, 00), size: Vector2(200, 200)));
   }
 }
-

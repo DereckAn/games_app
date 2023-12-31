@@ -4,7 +4,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
 
 class Player extends PositionComponent with HasGameRef<MyGame> {
-  Player({this.playerSize = 20});
+  Player({required super.position, this.playerSize = 20});
 
   final velocity = Vector2.zero();
   final double gravity = 980.0;
