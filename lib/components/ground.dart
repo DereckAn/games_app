@@ -34,6 +34,6 @@ class Ground extends PositionComponent {
     // canvas.drawRect(
     //     Rect.fromLTWH(0, 0, width, height), Paint()..color = Colors.red);
 
-    finerSprite.render(canvas, size: Vector2(100, 100), position: Vector2(210, 0)); // Esta es otra manera de poner una imagen
+    finerSprite.render(canvas, size: Vector2(100, 100), position: Vector2(210, -80)); // Esta es otra manera de poner una imagen
   }
 }

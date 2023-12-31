@@ -1,9 +1,13 @@
+import 'package:app_juegos/components/color_changer.dart';
 import 'package:app_juegos/components/color_switcher.dart';
 import 'package:app_juegos/components/ground.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 
-class Player extends PositionComponent with HasGameRef<MyGame> {
+class Player extends PositionComponent
+    with HasGameRef<MyGame>, CollisionCallbacks {
   Player({required super.position, this.playerSize = 20});
 
   final velocity = Vector2.zero();
@@ -11,12 +15,13 @@ class Player extends PositionComponent with HasGameRef<MyGame> {
   final double jumpVelocity = 300.0;
   final double playerSize;
 
+  Color color = Colors.blue;
+
   @override
   void onMount() {
-    position = Vector2.zero();
     size = Vector2.all(playerSize * 2);
     anchor = Anchor.center;
-    debugMode = true;
+    // debugMode = true;
     super.onMount();
   }
 
@@ -42,8 +47,8 @@ class Player extends PositionComponent with HasGameRef<MyGame> {
   void render(Canvas canvas) {
     // Esta función se llama cada vez que se actualiza el juego (60 veces por segundo) FPS
     super.render(canvas);
-    canvas.drawCircle((size / 2).toOffset(), playerSize,
-        Paint()..color = const Color.fromARGB(255, 39, 206, 212));
+    canvas.drawCircle(
+        (size / 2).toOffset(), playerSize, Paint()..color = color);
     //Paint paint = Paint();
     // paint.color = const Color.fromARGB(255, 39, 206, 212);
   }
@@ -51,4 +56,24 @@ class Player extends PositionComponent with HasGameRef<MyGame> {
   void jump() {
     velocity.y = -jumpVelocity;
   }
+
+  @override
+  void onLoad() {
+    add(CircleHitbox(radius: playerSize, anchor: anchor, collisionType: CollisionType.active));
+    super.onLoad();
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollision(intersectionPoints, other);
+    if (other is ColorChanger) {
+      other.removeFromParent();
+      ChangeColorRandom();
+    }
+  }
+
+  void ChangeColorRandom(){
+    color = gameRef.colors.random();
+  }
+
 }
