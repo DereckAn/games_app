@@ -10,6 +10,7 @@ class MyGame extends FlameGame with TapCallbacks {
   late Player myPlayer;
 
   final List<Color> colors;
+
   MyGame(
       {this.colors = const [
         Colors.blue,
@@ -75,7 +76,6 @@ class MyGame extends FlameGame with TapCallbacks {
   }
 
   void addCicularObstacles() {
-    world
-        .add(CircleRotator(position: Vector2(0, 00), size: Vector2(200, 200)));
+    world.add(CircleRotator(position: Vector2(0, 00), size: Vector2(200, 200)));
   }
 }

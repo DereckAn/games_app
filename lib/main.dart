@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/',
       routes: {
-        '/': (context) => const MyHomePage(title: 'Flutter Demo Home Page'),
+        '/': (context) => const MyHomePage(),
         '/connect4': (context) => const Connect4(),
         '/tetris': (context) => const TetrisScreen(),
         '/snake': (context) => const SnakeScreen(),
