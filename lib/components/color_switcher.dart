@@ -66,7 +66,8 @@ class MyGame extends FlameGame
         position: Vector2.zero(),
         size: Vector2(200, 200),
         listColors: selectedColors));
-    world.add(StarPoints(position: Vector2(0,0)));
+    world.add(StarPoints(position: Vector2(0, 0)));
+
     world.add(ColorChanger(position: Vector2(0, 200), color: selectedColor));
   }
 

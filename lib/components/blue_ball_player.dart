@@ -6,11 +6,12 @@ import 'package:app_juegos/components/star_points.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 
 class Player extends PositionComponent
     with HasGameRef<MyGame>, CollisionCallbacks {
-  Player({required super.position, this.playerSize = 20});
+  Player({required super.position, this.playerSize = 20}) : super(priority: 20);
 
   final velocity = Vector2.zero();
   final double gravity = 980.0;
@@ -75,8 +76,9 @@ class Player extends PositionComponent
         gameRef.gameOver();
       }
     } else if (other is StarPoints) {
-      other.removeFromParent();
+      other.collectionAnimation();
       gameRef.totalScore();
+      FlameAudio.play('burbuja.mp3');
     }
   }
 }

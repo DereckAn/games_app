@@ -32,7 +32,7 @@ class _ColorSwitcherScreenState extends State<ColorSwitcherScreen> {
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.play_arrow),
+                    icon: const Icon(Icons.pause),
                     onPressed: () {
                       setState(
                         () {
