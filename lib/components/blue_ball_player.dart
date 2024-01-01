@@ -59,6 +59,7 @@ class Player extends PositionComponent
         anchor: anchor,
         collisionType: CollisionType.active));
     super.onLoad();
+    // decorator.addLast(PaintDecorator.blur(3.0));
   }
 
   @override

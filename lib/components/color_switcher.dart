@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:app_juegos/components/blue_ball_player.dart';
@@ -9,8 +10,9 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
+import 'package:flame/rendering.dart';
 
-class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection {
+class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection, HasDecorator, HasTimeScale {
   late Player myPlayer;
   final random = Random();
 
@@ -29,6 +31,11 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   void onMount() {
     initilizeGame();
     super.onMount();
+  }
+  @override
+  void onLoad() {
+    decorator = PaintDecorator.blur(0);
+    super.onLoad();
   }
 
   @override
@@ -65,14 +72,29 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection {
     for (var element in world.children) {
       element.removeFromParent();
     }
-    print('Game Over');
+    initilizeGame();
   }
 
   void initilizeGame() {
     world.add(Ground(position: Vector2(0, 480)));
     world.add(myPlayer = Player(position: Vector2(0, 300)));
-    debugMode = true;
+    // debugMode = true;
     _addCicularObstacles();
     camera.moveTo(Vector2.zero());
+  }
+
+  bool get isGamePause => timeScale == 0;
+  bool get isPlaying => !isGamePause;
+
+  void pauseGame() {
+    (decorator as PaintDecorator).addBlur(10);
+    timeScale = 0;
+    // pauseEngine();
+  }
+
+  void resumeGame() {
+    (decorator as PaintDecorator).addBlur(0);
+    timeScale = 1;
+    // resumeEngine();
   }
 }
