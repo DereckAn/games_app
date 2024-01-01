@@ -16,12 +16,12 @@ class ColorChanger extends PositionComponent
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    final length = gameRef.colors.length;
+    final length = colors.length;
     final colorAngle = (math.pi * 2) / length;
 
     for (int i = 0; i < length; i++) {
       canvas.drawArc(size.toRect(), i * colorAngle, colorAngle, true,
-          Paint()..color = gameRef.colors[i]);
+          Paint()..color = colors[i]);
     }
   }
 

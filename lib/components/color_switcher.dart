@@ -7,29 +7,28 @@ import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 
+const List<Color> colors = [
+  Colors.blue,
+  Colors.red,
+  Colors.green,
+  Colors.yellow,
+  Colors.purple,
+  Colors.orange,
+  Colors.pink,
+  Colors.teal,
+  Colors.blueGrey,
+  Colors.cyan,
+  Colors.lime,
+  Colors.amber,
+  Colors.indigo,
+  Colors.brown,
+  Colors.grey,
+];
+
 class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   late Player myPlayer;
 
-  final List<Color> colors;
-
-  MyGame(
-      {this.colors = const [
-        Colors.blue,
-        Colors.red,
-        Colors.green,
-        Colors.yellow,
-        Colors.purple,
-        Colors.orange,
-        Colors.pink,
-        Colors.teal,
-        Colors.cyan,
-        Colors.lime,
-        Colors.amber,
-        Colors.indigo,
-        Colors.brown,
-        Colors.grey,
-        Colors.blueGrey,
-      ]})
+  MyGame()
       : super(
           camera: CameraComponent.withFixedResolution(
             width: 600,
@@ -38,16 +37,11 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection {
         );
 
   @override
-  Color backgroundColor() {
-    return const Color.fromARGB(255, 32, 32, 32); // Set a fixed color
-  }
+  Color backgroundColor() => const Color.fromARGB(255, 32, 32, 32);
 
   @override
   void onMount() {
-    world.add(Ground(position: Vector2(0, 480)));
-    world.add(myPlayer = Player(position: Vector2(0, 300)));
-    debugMode = true;
-    addCicularObstacles();
+    initilizeGame();
     super.onMount();
   }
 
@@ -59,17 +53,26 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection {
 
   @override
   void update(double dt) {
-    final cameraY = camera.viewfinder.position.y;
-    final playerY = myPlayer.position.y;
-
-    if (playerY < cameraY) {
-      camera.viewfinder.position = Vector2(0, playerY);
+    if (myPlayer.position.y < camera.viewfinder.position.y) {
+      camera.viewfinder.position = Vector2.zero()..y = myPlayer.position.y;
     }
     super.update(dt);
   }
 
-  void addCicularObstacles() {
-    world.add(CircleRotator(position: Vector2(0, 00), size: Vector2(200, 200)));
+  void _addCicularObstacles() {
+    world.add(CircleRotator(position: Vector2.zero(), size: Vector2(200, 200)));
     world.add(ColorChanger(position: Vector2(0, 200), color: colors[0]));
+  }
+
+  void gameOver() {
+    print('Game Over');
+  }
+
+  void initilizeGame() {
+    world.add(Ground(position: Vector2(0, 480)));
+    world.add(myPlayer = Player(position: Vector2(0, 300)));
+    debugMode = true;
+    _addCicularObstacles();
+    camera.moveTo(Vector2.zero());
   }
 }

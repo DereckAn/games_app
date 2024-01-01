@@ -1,13 +1,18 @@
-import 'dart:math';
+import 'dart:math' as math;
 
 import 'package:app_juegos/components/color_switcher.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 
-class CircleRotator extends PositionComponent with HasGameRef<MyGame> {
+class CircleRotator extends PositionComponent
+    with HasGameRef<MyGame>, CollisionCallbacks {
   CircleRotator(
-      {required super.size, required super.position, this.thinkness = 8, this.speed = 2})
+      {required super.size,
+      required super.position,
+      this.thinkness = 10,
+      this.speed = 2})
       : assert(size!.x == size.y),
         super(anchor: Anchor.center);
 
@@ -17,21 +22,25 @@ class CircleRotator extends PositionComponent with HasGameRef<MyGame> {
   @override
   void onLoad() {
     super.onLoad();
-    List<Color> colorsCopy = List<Color>.from(gameRef.colors);
-    colorsCopy.shuffle();
-    List<Color> selectedColors = colorsCopy.take(4).toList();
+
+    List<Color> modifiableColors =
+        List.from(colors);
+    modifiableColors.shuffle();
+    List<Color> selectedColors = modifiableColors.take(4).toList();
 
     for (int i = 0; i < selectedColors.length; i++) {
       add(CircularArc(
         color: selectedColors[i],
-        firstAngle: (i * 2 * pi) / selectedColors.length,
-        secondAngle: (2 * pi) / selectedColors.length,
+        firstAngle: (i * 2 * math.pi) / selectedColors.length,
+        secondAngle: (2 * math.pi) / selectedColors.length,
       ));
     }
-    add(RotateEffect.to(
-        2 * pi,
-        EffectController(
-            infinite: true, speed: speed))); //  Esta es otra manera de rotarlo
+    add(
+      RotateEffect.to(
+        2 * math.pi,
+        EffectController(infinite: true, speed: speed),
+      ),
+    );
   }
 }
 
@@ -51,6 +60,8 @@ class CircularArc extends PositionComponent with ParentIsA<CircleRotator> {
     super.onMount();
     size = parent.size;
     position = size / 2;
+
+    addHitbox();
   }
 
   @override
@@ -67,9 +78,28 @@ class CircularArc extends PositionComponent with ParentIsA<CircleRotator> {
           ..strokeWidth = parent.thinkness);
   }
 
-  // @override  // Esta es una manera de rotarlo
-  // void update(double dt) {
-  //   super.update(dt);
-  //   angle += dt; // Angle ya viene en el componente. No tenemos que instanciarlo.
-  // }
+  void addHitbox() {
+    final center = size / 2;
+    const precision = 8;
+    final segment = secondAngle / (precision - 1);
+    final radius = center.x;
+
+    List<Vector2> points = [];
+    for (int i = 0; i < precision; i++) {
+      final segmento = firstAngle + segment * i;
+      final cosSegmento = math.cos(segmento);
+      final sinSegmento = math.sin(segmento);
+      points.add(center + Vector2(cosSegmento, sinSegmento) * radius);
+    }
+
+    for (int i = precision - 1; i >= 0; i--) {
+      final segmento = firstAngle + segment * i;
+      final cosSegmento = math.cos(segmento);
+      final sinSegmento = math.sin(segmento);
+      points.add(center +
+          Vector2(cosSegmento, sinSegmento) * (radius - parent.thinkness));
+    }
+
+    add(PolygonHitbox(points, collisionType: CollisionType.passive));
+  }
 }

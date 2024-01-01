@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 class GameOverDialog extends StatelessWidget {
   const GameOverDialog({
-    Key? key,
+    super.key,
     this.points = 0,
     required this.startGame,
     this.initializeGame,
-  }) : super(key: key);
+  });
 
   final int? points;
   final Function? initializeGame;

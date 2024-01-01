@@ -1,6 +1,7 @@
 import 'package:app_juegos/components/color_changer.dart';
 import 'package:app_juegos/components/color_switcher.dart';
 import 'package:app_juegos/components/ground.dart';
+import 'package:app_juegos/components/rotator_circular.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -14,6 +15,7 @@ class Player extends PositionComponent
   final double gravity = 980.0;
   final double jumpVelocity = 300.0;
   final double playerSize;
+  late Paint paint;
 
   Color color = Colors.blue;
 
@@ -21,21 +23,18 @@ class Player extends PositionComponent
   void onMount() {
     size = Vector2.all(playerSize * 2);
     anchor = Anchor.center;
-    // debugMode = true;
+    paint = Paint()..color = color;
     super.onMount();
   }
 
   @override
   void update(double dt) {
-    // delta time is the time between frames. How much time has passed since the last update.
-    // 60 FPS = 1/60 = 0.0166666666666667 = dt
-    // 120 FPS = 1/120 = 0.0083333333333333 = dt
-    // Esta función se llama cada vez que se actualiza el juego (60 veces por segundo) FPS
     super.update(dt);
     position += velocity * dt;
 
     Ground ground = gameRef.findByKeyName(Ground.groundName)!;
-    if (positionOfAnchor(Anchor.bottomCenter).y > ground.position.y) {
+    double groundPositionY = positionOfAnchor(Anchor.bottomCenter).y;
+    if (groundPositionY > ground.position.y) {
       velocity.setValues(0, 0);
       position = Vector2(0, ground.position.y - playerSize);
     } else {
@@ -45,12 +44,8 @@ class Player extends PositionComponent
 
   @override
   void render(Canvas canvas) {
-    // Esta función se llama cada vez que se actualiza el juego (60 veces por segundo) FPS
     super.render(canvas);
-    canvas.drawCircle(
-        (size / 2).toOffset(), playerSize, Paint()..color = color);
-    //Paint paint = Paint();
-    // paint.color = const Color.fromARGB(255, 39, 206, 212);
+    canvas.drawCircle((size / 2).toOffset(), playerSize, paint);
   }
 
   void jump() {
@@ -59,7 +54,10 @@ class Player extends PositionComponent
 
   @override
   void onLoad() {
-    add(CircleHitbox(radius: playerSize, anchor: anchor, collisionType: CollisionType.active));
+    add(CircleHitbox(
+        radius: playerSize,
+        anchor: anchor,
+        collisionType: CollisionType.active));
     super.onLoad();
   }
 
@@ -68,12 +66,16 @@ class Player extends PositionComponent
     super.onCollision(intersectionPoints, other);
     if (other is ColorChanger) {
       other.removeFromParent();
-      ChangeColorRandom();
+      changeColorRandom();
+    } else if (other is CircularArc) {
+      if (color != other.color) {
+        gameRef.gameOver();
+      }
     }
   }
 
-  void ChangeColorRandom(){
-    color = gameRef.colors.random();
+  void changeColorRandom() {
+    color = colors.random();
+    paint.color = color;
   }
-
 }
