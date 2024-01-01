@@ -4,35 +4,35 @@ import 'package:app_juegos/components/color_switcher.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame/extensions.dart';
 import 'package:flutter/material.dart';
 
 class CircleRotator extends PositionComponent
     with HasGameRef<MyGame>, CollisionCallbacks {
-  CircleRotator(
-      {required super.size,
-      required super.position,
-      this.thinkness = 10,
-      this.speed = 2})
-      : assert(size!.x == size.y),
-        super(anchor: Anchor.center);
-
+      
+  final List<Color> listColors;
   final double thinkness;
   final double speed;
+
+  CircleRotator({
+    required Vector2 size,
+    required Vector2 position,
+    required this.listColors,
+    this.thinkness = 10,
+    this.speed = 2,
+  })  : assert(size.x == size.y),
+        super(size: size, position: position, anchor: Anchor.center); // Remove super.listColors from here
+
 
   @override
   void onLoad() {
     super.onLoad();
 
-    List<Color> modifiableColors =
-        List.from(colors);
-    modifiableColors.shuffle();
-    List<Color> selectedColors = modifiableColors.take(4).toList();
-
-    for (int i = 0; i < selectedColors.length; i++) {
+    for (int i = 0; i < listColors.length; i++) {
       add(CircularArc(
-        color: selectedColors[i],
-        firstAngle: (i * 2 * math.pi) / selectedColors.length,
-        secondAngle: (2 * math.pi) / selectedColors.length,
+        color: listColors[i],
+        firstAngle: (i * 2 * math.pi) / listColors.length,
+        secondAngle: (2 * math.pi) / listColors.length,
       ));
     }
     add(

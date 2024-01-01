@@ -66,16 +66,12 @@ class Player extends PositionComponent
     super.onCollision(intersectionPoints, other);
     if (other is ColorChanger) {
       other.removeFromParent();
-      changeColorRandom();
+      color = other.color;
+      paint.color = color;
     } else if (other is CircularArc) {
       if (color != other.color) {
         gameRef.gameOver();
       }
     }
-  }
-
-  void changeColorRandom() {
-    color = colors.random();
-    paint.color = color;
   }
 }

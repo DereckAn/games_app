@@ -1,32 +1,18 @@
+import 'dart:math';
+
 import 'package:app_juegos/components/blue_ball_player.dart';
 import 'package:app_juegos/components/color_changer.dart';
 import 'package:app_juegos/components/ground.dart';
 import 'package:app_juegos/components/rotator_circular.dart';
+import 'package:app_juegos/constants/change_colors.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
-import 'package:flutter/material.dart';
-
-const List<Color> colors = [
-  Colors.blue,
-  Colors.red,
-  Colors.green,
-  Colors.yellow,
-  Colors.purple,
-  Colors.orange,
-  Colors.pink,
-  Colors.teal,
-  Colors.blueGrey,
-  Colors.cyan,
-  Colors.lime,
-  Colors.amber,
-  Colors.indigo,
-  Colors.brown,
-  Colors.grey,
-];
 
 class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   late Player myPlayer;
+  final random = Random();
 
   MyGame()
       : super(
@@ -60,11 +46,25 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection {
   }
 
   void _addCicularObstacles() {
-    world.add(CircleRotator(position: Vector2.zero(), size: Vector2(200, 200)));
-    world.add(ColorChanger(position: Vector2(0, 200), color: colors[0]));
-  }
+    List<Color> selectedColors = getSelectedColors();
+
+    // Guarda el color seleccionado en una variable.
+    Color selectedColor = selectedColors[random.nextInt(selectedColors.length)];
+
+    world.add(CircleRotator(
+        position: Vector2.zero(),
+        size: Vector2(200, 200),
+        listColors: selectedColors));
+    world.add(ColorChanger(
+        position: Vector2(0, 200),
+        color: selectedColor));  // Usa la variable aquí.
+}
+
 
   void gameOver() {
+    for (var element in world.children) {
+      element.removeFromParent();
+    }
     print('Game Over');
   }
 

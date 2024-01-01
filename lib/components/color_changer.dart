@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:app_juegos/components/color_switcher.dart';
+import 'package:app_juegos/constants/change_colors.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flutter/material.dart';
