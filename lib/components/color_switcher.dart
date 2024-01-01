@@ -1,20 +1,23 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:app_juegos/components/blue_ball_player.dart';
 import 'package:app_juegos/components/color_changer.dart';
 import 'package:app_juegos/components/ground.dart';
 import 'package:app_juegos/components/rotator_circular.dart';
+import 'package:app_juegos/components/star_points.dart';
 import 'package:app_juegos/constants/change_colors.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
 import 'package:flame/game.dart';
 import 'package:flame/rendering.dart';
+import 'package:flutter/material.dart';
 
-class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection, HasDecorator, HasTimeScale {
+class MyGame extends FlameGame
+    with TapCallbacks, HasCollisionDetection, HasDecorator, HasTimeScale {
   late Player myPlayer;
   final random = Random();
+  ValueNotifier<int> currentScore = ValueNotifier<int>(0);
 
   MyGame()
       : super(
@@ -32,6 +35,7 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection, HasDeco
     initilizeGame();
     super.onMount();
   }
+
   @override
   void onLoad() {
     decorator = PaintDecorator.blur(0);
@@ -62,11 +66,9 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection, HasDeco
         position: Vector2.zero(),
         size: Vector2(200, 200),
         listColors: selectedColors));
-    world.add(ColorChanger(
-        position: Vector2(0, 200),
-        color: selectedColor));  // Usa la variable aquí.
-}
-
+    world.add(StarPoints(position: Vector2(0,0)));
+    world.add(ColorChanger(position: Vector2(0, 200), color: selectedColor));
+  }
 
   void gameOver() {
     for (var element in world.children) {
@@ -76,6 +78,7 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection, HasDeco
   }
 
   void initilizeGame() {
+    currentScore.value = 0;
     world.add(Ground(position: Vector2(0, 480)));
     world.add(myPlayer = Player(position: Vector2(0, 300)));
     // debugMode = true;
@@ -96,5 +99,9 @@ class MyGame extends FlameGame with TapCallbacks, HasCollisionDetection, HasDeco
     (decorator as PaintDecorator).addBlur(0);
     timeScale = 1;
     // resumeEngine();
+  }
+
+  void totalScore() {
+    currentScore.value++;
   }
 }

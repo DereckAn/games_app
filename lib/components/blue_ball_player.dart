@@ -2,6 +2,7 @@ import 'package:app_juegos/components/color_changer.dart';
 import 'package:app_juegos/components/color_switcher.dart';
 import 'package:app_juegos/components/ground.dart';
 import 'package:app_juegos/components/rotator_circular.dart';
+import 'package:app_juegos/components/star_points.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/extensions.dart';
@@ -73,6 +74,9 @@ class Player extends PositionComponent
       if (color != other.color) {
         gameRef.gameOver();
       }
+    } else if (other is StarPoints) {
+      other.removeFromParent();
+      gameRef.totalScore();
     }
   }
 }

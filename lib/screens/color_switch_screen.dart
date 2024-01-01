@@ -29,15 +29,32 @@ class _ColorSwitcherScreenState extends State<ColorSwitcherScreen> {
           if (game.isPlaying)
             Align(
               alignment: Alignment.bottomLeft,
-              child: IconButton(
-                icon: const Icon(Icons.play_arrow),
-                onPressed: () {
-                  setState(
-                    () {
-                      game.pauseGame();
+              child: Row(
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.play_arrow),
+                    onPressed: () {
+                      setState(
+                        () {
+                          game.pauseGame();
+                        },
+                      );
                     },
-                  );
-                },
+                  ),
+                  ValueListenableBuilder(
+                    valueListenable: game.currentScore,
+                    builder: (ctx, int value, widget) {
+                      return Text(
+                        'Score: $value',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 30,
+                          color: ThemeData.dark().colorScheme.secondary,
+                        ),
+                      );
+                    },
+                  ),
+                ],
               ),
             ),
           if (game.isGamePause)
@@ -47,11 +64,11 @@ class _ColorSwitcherScreenState extends State<ColorSwitcherScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
+                    Text(
                       'PAUSED!',
                       style: TextStyle(
                         fontSize: 50,
-                        color: Colors.white,
+                        color: ThemeData.dark().colorScheme.secondary,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
