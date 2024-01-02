@@ -9,8 +9,10 @@ import 'package:app_juegos/constants/change_colors.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/rendering.dart';
+import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 
 class MyGame extends FlameGame
@@ -37,9 +39,16 @@ class MyGame extends FlameGame
   }
 
   @override
-  void onLoad() {
+  Future<void> onLoad() async {
+    await super.onLoad();
     decorator = PaintDecorator.blur(0);
-    super.onLoad();
+    await Flame.images.loadAll([
+      'finger.png',
+      'star.png',
+    ]);
+    await FlameAudio.audioCache.loadAll([
+      'burbuja.mp3',
+    ]);
   }
 
   @override

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 class StarPoints extends PositionComponent {
   late Sprite _starSprite;
+  final Paint _paint = Paint();
 
   StarPoints({
     required super.position,
@@ -51,7 +52,7 @@ class StarPoints extends PositionComponent {
                     canvas,
                     size: (size / 2) * (1 - particle.progress),
                     anchor: Anchor.center,
-                    overridePaint: Paint()
+                    overridePaint: _paint
                       ..color = Colors.yellow.withOpacity(1 -
                           particle
                               .progress), // para que se hagan mas transparentes

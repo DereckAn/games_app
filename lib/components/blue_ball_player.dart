@@ -17,7 +17,7 @@ class Player extends PositionComponent
   final double gravity = 980.0;
   final double jumpVelocity = 300.0;
   final double playerSize;
-  late Paint paint;
+  late Paint _paint;
 
   Color color = Colors.blue;
 
@@ -25,7 +25,7 @@ class Player extends PositionComponent
   void onMount() {
     size = Vector2.all(playerSize * 2);
     anchor = Anchor.center;
-    paint = Paint()..color = color;
+    _paint = Paint()..color = color;
     super.onMount();
   }
 
@@ -47,7 +47,7 @@ class Player extends PositionComponent
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    canvas.drawCircle((size / 2).toOffset(), playerSize, paint);
+    canvas.drawCircle((size / 2).toOffset(), playerSize, _paint);
   }
 
   void jump() {
@@ -70,7 +70,7 @@ class Player extends PositionComponent
     if (other is ColorChanger) {
       other.removeFromParent();
       color = other.color;
-      paint.color = color;
+      _paint.color = color;
     } else if (other is CircularArc) {
       if (color != other.color) {
         gameRef.gameOver();

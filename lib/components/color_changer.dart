@@ -13,6 +13,7 @@ class ColorChanger extends PositionComponent
 
   final double radius;
   final Color color;
+  final _paint = Paint();
 
   @override
   void render(Canvas canvas) {
@@ -22,7 +23,7 @@ class ColorChanger extends PositionComponent
 
     for (int i = 0; i < length; i++) {
       canvas.drawArc(size.toRect(), i * colorAngle, colorAngle, true,
-          Paint()..color = colors[i]);
+          _paint..color = colors[i]);
     }
   }
 
