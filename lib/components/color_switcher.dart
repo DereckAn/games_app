@@ -4,6 +4,7 @@ import 'package:app_juegos/components/blue_ball_player.dart';
 import 'package:app_juegos/components/color_changer.dart';
 import 'package:app_juegos/components/ground.dart';
 import 'package:app_juegos/components/rotator_circular.dart';
+import 'package:app_juegos/components/rotator_x.dart';
 import 'package:app_juegos/components/star_points.dart';
 import 'package:app_juegos/constants/change_colors.dart';
 import 'package:flame/components.dart';
@@ -19,6 +20,7 @@ class MyGame extends FlameGame
     with TapCallbacks, HasCollisionDetection, HasDecorator, HasTimeScale {
   late Player myPlayer;
   final random = Random();
+  double lastObstaclePosition = 0;
   ValueNotifier<int> currentScore = ValueNotifier<int>(0);
 
   MyGame()
@@ -57,28 +59,35 @@ class MyGame extends FlameGame
     super.onTapDown(event);
   }
 
-  @override
-  void update(double dt) {
-    if (myPlayer.position.y < camera.viewfinder.position.y) {
-      camera.viewfinder.position = Vector2.zero()..y = myPlayer.position.y;
-    }
-    super.update(dt);
+ @override
+void update(double dt) {
+  if (myPlayer.position.y < camera.viewfinder.position.y) {
+    camera.viewfinder.position = Vector2.zero()..y = myPlayer.position.y;
   }
+
+  // Si el jugador ha subido 500 unidades desde el último obstáculo, agrega un nuevo obstáculo
+  if (lastObstaclePosition - myPlayer.position.y > 500) {
+    _addCicularObstacles();
+    lastObstaclePosition = myPlayer.position.y;
+  }
+
+  super.update(dt);
+}
 
   void _addCicularObstacles() {
-    List<Color> selectedColors = getSelectedColors();
+  List<Color> selectedColors = getSelectedColors();
+  // Guarda el color seleccionado en una variable.
+  Color selectedColor = selectedColors[random.nextInt(selectedColors.length)];
 
-    // Guarda el color seleccionado en una variable.
-    Color selectedColor = selectedColors[random.nextInt(selectedColors.length)];
-
-    world.add(CircleRotator(
-        position: Vector2.zero(),
-        size: Vector2(200, 200),
-        listColors: selectedColors));
-    world.add(StarPoints(position: Vector2(0, 0)));
-
-    world.add(ColorChanger(position: Vector2(0, 200), color: selectedColor));
-  }
+  // Asegúrate de que los obstáculos se agreguen en la posición correcta
+  world.add(CircleRotator(
+      position: Vector2(0, 0),
+      size: Vector2(200, 200),
+      listColors: selectedColors));
+      // world.add(XRotator(listColors: selectedColors, position: Vector2(0, 300), size: Vector2(200, 200)));
+  world.add(StarPoints(position: Vector2(0, lastObstaclePosition - 600)));
+  world.add(ColorChanger(position: Vector2(0, 250), color: selectedColor));
+}
 
   void gameOver() {
     for (var element in world.children) {
@@ -93,6 +102,7 @@ class MyGame extends FlameGame
     world.add(myPlayer = Player(position: Vector2(0, 300)));
     // debugMode = true;
     _addCicularObstacles();
+    lastObstaclePosition = myPlayer.position.y;
     camera.moveTo(Vector2.zero());
   }
 
