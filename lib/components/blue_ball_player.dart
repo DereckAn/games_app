@@ -2,6 +2,7 @@ import 'package:app_juegos/components/color_changer.dart';
 import 'package:app_juegos/components/color_switcher.dart';
 import 'package:app_juegos/components/ground.dart';
 import 'package:app_juegos/components/rotator_circular.dart';
+import 'package:app_juegos/components/rotator_x.dart';
 import 'package:app_juegos/components/star_points.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
@@ -79,6 +80,12 @@ class Player extends PositionComponent
       other.collectionAnimation();
       gameRef.totalScore();
       FlameAudio.play('burbuja.mp3');
+    } else if (other is XRotator) {
+      // if (color != other.color) {
+      //   gameRef.gameOver();
+      // }
+      print("Estas tocando el cuadrado ");
     }
+
   }
 }

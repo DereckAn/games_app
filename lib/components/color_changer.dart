@@ -29,7 +29,11 @@ class ColorChanger extends PositionComponent
 
   @override
   void onLoad() {
-    add(CircleHitbox(radius: radius, anchor: anchor, position: size / 2, collisionType: CollisionType.passive));
+    add(CircleHitbox(
+        radius: radius,
+        anchor: anchor,
+        position: size / 2,
+        collisionType: CollisionType.passive));
     super.onLoad();
   }
 }
