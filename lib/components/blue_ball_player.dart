@@ -19,6 +19,8 @@ class Player extends PositionComponent
   final double jumpVelocity = 300.0;
   final double playerSize;
   late Paint _paint;
+  late double collisionCooldown = 0.0;
+
 
   Color color = Colors.blue;
 
@@ -42,6 +44,10 @@ class Player extends PositionComponent
       position = Vector2(0, ground.position.y - playerSize);
     } else {
       velocity.y += gravity * dt;
+    }
+
+    if (collisionCooldown > 0) {
+      collisionCooldown -= dt;
     }
   }
 
@@ -72,7 +78,8 @@ class Player extends PositionComponent
       other.removeFromParent();
       color = other.color;
       _paint.color = color;
-    } else if (other is CircularArc) {
+      collisionCooldown = 0.5;  // Ignora las colisiones durante 0.5 segundos
+    } else if (other is CircularArc && collisionCooldown <= 0) {
       if (color != other.color) {
         gameRef.gameOver();
       }
@@ -80,11 +87,10 @@ class Player extends PositionComponent
       other.collectionAnimation();
       gameRef.totalScore();
       FlameAudio.play('burbuja.mp3');
-    } else if (other is RectanglePart) {
-      // if (color != other.color) {
-      //   gameRef.gameOver();
-      // }
-      print("Estas tocando el cuadrado ");
+    } else if (other is RectanglePart && collisionCooldown <= 0) {
+      if (color != other.color) {
+        gameRef.gameOver();
+      }
     }
   }
 }

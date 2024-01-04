@@ -43,6 +43,7 @@ class RectanglePart extends PositionComponent with ParentIsA<XRotator> {
   final double thinkness;
   final double largo;
   final Color color;
+  final Paint paint = Paint();
 
   RectanglePart(
       {required this.thinkness,
@@ -56,7 +57,8 @@ class RectanglePart extends PositionComponent with ParentIsA<XRotator> {
   void onMount() {
     super.onMount();
     size = parent.size / 2;
-    position = parent.position + Vector2(parent.size.x / 2, parent.size.y / 2);
+    // position = Vector2.zero();
+    position = Vector2(parent.size.x / 2, parent.size.y / 2);
     addHitBox();
   }
 
@@ -65,7 +67,7 @@ class RectanglePart extends PositionComponent with ParentIsA<XRotator> {
     super.render(canvas);
     canvas.drawRect(
       Rect.fromLTWH(size.x, 0, -largo, (thinkness / 2)),
-      Paint()..color = color,
+      paint..color = color,
     );
   }
 

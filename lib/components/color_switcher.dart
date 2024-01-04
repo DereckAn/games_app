@@ -5,7 +5,6 @@ import 'package:app_juegos/components/color_changer.dart';
 import 'package:app_juegos/components/ground.dart';
 import 'package:app_juegos/components/rotator_circular.dart';
 import 'package:app_juegos/components/rotator_x.dart';
-import 'package:app_juegos/components/square_rotator.dart';
 import 'package:app_juegos/components/star_points.dart';
 import 'package:app_juegos/constants/change_colors.dart';
 import 'package:flame/components.dart';
@@ -79,20 +78,21 @@ class MyGame extends FlameGame
     List<Color> selectedColors = getSelectedColors();
     // Guarda el color seleccionado en una variable.
     Color selectedColor = selectedColors[random.nextInt(selectedColors.length)];
-debugMode = true;
+    // debugMode = true;
     // Asegúrate de que los obstáculos se agreguen en la posición correcta
-    // world.add(CircleRotator(
-    //     position: Vector2(0, 0),
-    //     size: Vector2(200, 200),
-    //     listColors: selectedColors));
-    world.add(XRotator(
-        listColors: selectedColors,
+    world.add(CircleRotator(
         position: Vector2(0, 0),
-        size: Vector2(300, 300)));
-    // world.add(MovingSquare(size: Vector2(100, 100), position: Vector2(0, 0)));
+        size: Vector2(200, 200),
+        listColors: selectedColors));
+    world.add(StarPoints(position: Vector2(0, 0)));
+    world.add(ColorChanger(position: Vector2(0, 200), color: selectedColor));
 
-    // world.add(StarPoints(position: Vector2(0, 0)));
-    // world.add(ColorChanger(position: Vector2(0, 300), color: selectedColor));
+    world.add(XRotator(
+        listColors: colors,
+        speed: 1.5,
+        position: Vector2(0, -500),
+        size: Vector2(300, 300)));
+    world.add(StarPoints(position: Vector2(0, -500)));
   }
 
   void gameOver() {
