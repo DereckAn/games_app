@@ -5,6 +5,7 @@ import 'package:app_juegos/components/color_changer.dart';
 import 'package:app_juegos/components/ground.dart';
 import 'package:app_juegos/components/rotator_circular.dart';
 import 'package:app_juegos/components/rotator_x.dart';
+import 'package:app_juegos/components/square_rotator.dart';
 import 'package:app_juegos/components/star_points.dart';
 import 'package:app_juegos/constants/change_colors.dart';
 import 'package:flame/components.dart';
@@ -88,6 +89,8 @@ debugMode = true;
         listColors: selectedColors,
         position: Vector2(0, 0),
         size: Vector2(300, 300)));
+    // world.add(MovingSquare(size: Vector2(100, 100), position: Vector2(0, 0)));
+
     // world.add(StarPoints(position: Vector2(0, 0)));
     // world.add(ColorChanger(position: Vector2(0, 300), color: selectedColor));
   }

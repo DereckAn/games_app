@@ -80,12 +80,11 @@ class Player extends PositionComponent
       other.collectionAnimation();
       gameRef.totalScore();
       FlameAudio.play('burbuja.mp3');
-    } else if (other is XRotator) {
+    } else if (other is RectanglePart) {
       // if (color != other.color) {
       //   gameRef.gameOver();
       // }
       print("Estas tocando el cuadrado ");
     }
-
   }
 }
