@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class Connect4 extends StatefulWidget {
-  const Connect4({super.key});
+class Connect5 extends StatefulWidget {
+  const Connect5({super.key});
 
   @override
-  State<Connect4> createState() => _Connect4State();
+  State<Connect5> createState() => _Connect4State();
 }
 
-class _Connect4State extends State<Connect4> {
+class _Connect4State extends State<Connect5> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -2,11 +2,13 @@ import 'dart:math';
 
 import 'package:app_juegos/components/blue_ball_player.dart';
 import 'package:app_juegos/components/color_changer.dart';
+import 'package:app_juegos/components/gameover_dialog.dart';
 import 'package:app_juegos/components/ground.dart';
 import 'package:app_juegos/components/rotator_circular.dart';
 import 'package:app_juegos/components/rotator_x.dart';
 import 'package:app_juegos/components/star_points.dart';
 import 'package:app_juegos/constants/change_colors.dart';
+import 'package:app_juegos/widgets/game_over_dialog.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/extensions.dart';
@@ -22,8 +24,9 @@ class MyGame extends FlameGame
   final random = Random();
   double lastObstaclePosition = 0;
   ValueNotifier<int> currentScore = ValueNotifier<int>(0);
+  BuildContext context;
 
-  MyGame()
+  MyGame(this.context)
       : super(
           camera: CameraComponent.withFixedResolution(
             width: 600,
@@ -65,12 +68,6 @@ class MyGame extends FlameGame
       camera.viewfinder.position = Vector2.zero()..y = myPlayer.position.y;
     }
 
-    // Si el jugador ha subido 500 unidades desde el último obstáculo, agrega un nuevo obstáculo
-    // if (lastObstaclePosition - myPlayer.position.y > 500) {
-    //   _addCicularObstacles();
-    //   lastObstaclePosition = myPlayer.position.y;
-    // }
-
     super.update(dt);
   }
 
@@ -93,13 +90,47 @@ class MyGame extends FlameGame
         position: Vector2(0, -500),
         size: Vector2(300, 300)));
     world.add(StarPoints(position: Vector2(0, -500)));
+
+    _addingMoreObstacles(2);
+  }
+
+  void _addingMoreObstacles(int distance) {
+    List<Color> selectedColors = getSelectedColors();
+    // Guarda el color seleccionado en una variable.
+    Color selectedColor = selectedColors[random.nextInt(selectedColors.length)];
+
+    world.add(CircleRotator(
+        position: Vector2(0, distance * -500),
+        size: Vector2(200, 200),
+        listColors: selectedColors));
+    world.add(CircleRotator(
+        position: Vector2(0, distance * -500),
+        size: Vector2(250, 250),
+        listColors: selectedColors));
+    world.add(StarPoints(position: Vector2(0, distance * -500)));
+    world.add(ColorChanger(
+        position: Vector2(0, distance * -400), color: selectedColor));
   }
 
   void gameOver() {
+    
     for (var element in world.children) {
       element.removeFromParent();
     }
-    initilizeGame();
+    // world.add(FlameGameOver(
+    //     position: Vector2(0, 0), gameOverSize: 500));
+    // pauseGame();
+    
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return GameOverDialog(
+          points: currentScore.value,
+          startGame: initilizeGame,
+        );
+      },
+    );
   }
 
   void initilizeGame() {

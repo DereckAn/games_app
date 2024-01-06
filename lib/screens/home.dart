@@ -15,6 +15,10 @@ class _MyHomePageState extends State<MyHomePage> {
       'name': 'Tic Tac Toe 5x5',
       'svg': 'assets/svg/connect.svg',
       'route': '/connect4'
+    },{
+      'name': 'Tic Tac Toe 3x3',
+      'svg': 'assets/svg/connect.svg',
+      'route': '/tictactoe'
     },
     {
       'name': 'Tetris',

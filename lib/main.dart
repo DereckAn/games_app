@@ -1,10 +1,11 @@
 import 'package:app_juegos/screens/color_switch_screen.dart';
-import 'package:app_juegos/screens/connect4_screen.dart';
+import 'package:app_juegos/screens/connect5_screen.dart';
 import 'package:app_juegos/screens/home.dart';
 import 'package:app_juegos/screens/memory_screen.dart';
 import 'package:app_juegos/screens/screen_2048.dart';
 import 'package:app_juegos/screens/snake_screen.dart';
 import 'package:app_juegos/screens/tetris_screen.dart';
+import 'package:app_juegos/screens/tic_tac_toe_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,17 +18,17 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       initialRoute: '/',
       routes: {
         '/': (context) => const MyHomePage(),
-        '/connect4': (context) => const Connect4(),
+        '/connect4': (context) => const Connect5(),
         '/tetris': (context) => const TetrisScreen(),
         '/snake': (context) => const SnakeScreen(),
         '/2048': (context) => const Screen2048(),
         '/memory': (context) => const MemoryScreen(),
         '/colorswitch': (context) => const ColorSwitcherScreen(),
+        '/tictactoe': (context) => const TicTacToe(),
       },
       title: 'Flutter Demo',
       theme: ThemeData(

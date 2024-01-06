@@ -19,8 +19,7 @@ class Player extends PositionComponent
   final double jumpVelocity = 300.0;
   final double playerSize;
   late Paint _paint;
-  late double collisionCooldown = 0.0;
-
+  late bool isGameOver = false;
 
   Color color = Colors.blue;
 
@@ -44,10 +43,6 @@ class Player extends PositionComponent
       position = Vector2(0, ground.position.y - playerSize);
     } else {
       velocity.y += gravity * dt;
-    }
-
-    if (collisionCooldown > 0) {
-      collisionCooldown -= dt;
     }
   }
 
@@ -78,17 +73,18 @@ class Player extends PositionComponent
       other.removeFromParent();
       color = other.color;
       _paint.color = color;
-      collisionCooldown = 0.5;  // Ignora las colisiones durante 0.5 segundos
-    } else if (other is CircularArc && collisionCooldown <= 0) {
-      if (color != other.color) {
+    } else if (other is CircularArc) {
+      if (color != (other).color && !isGameOver) {
+        isGameOver = true;
         gameRef.gameOver();
       }
     } else if (other is StarPoints) {
       other.collectionAnimation();
       gameRef.totalScore();
       FlameAudio.play('burbuja.mp3');
-    } else if (other is RectanglePart && collisionCooldown <= 0) {
-      if (color != other.color) {
+    } else if (other is RectanglePart) {
+      if (color != (other).color && !isGameOver) {
+        isGameOver = true;
         gameRef.gameOver();
       }
     }

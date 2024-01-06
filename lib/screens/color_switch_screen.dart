@@ -15,7 +15,7 @@ class _ColorSwitcherScreenState extends State<ColorSwitcherScreen> {
   @override
   void initState() {
     super.initState();
-    game = MyGame();
+    game = MyGame(context);
   }
 
   @override
