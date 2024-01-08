@@ -1,3 +1,4 @@
+import 'package:app_juegos/widgets/button.dart';
 import 'package:flutter/material.dart';
 
 class TicTacToe extends StatelessWidget {
@@ -9,9 +10,14 @@ class TicTacToe extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Tic Tac Toe'),
       ),
-      body: const Center(
-        child: Text('Tic Tac Toe'),
-      ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ButtonMenu(text: 'Hola perro', onPressed: () {  }, ),
+          const SizedBox(height: 20),
+          ButtonMenu(text: 'Adios gato', onPressed: () {  }, ),
+        ],
+      )
     );
   }
 }

@@ -36,11 +36,10 @@ class MyApp extends StatelessWidget {
           primary: Color.fromARGB(255, 23, 23, 23),
           secondary: Colors.blue,
           surface: Color.fromRGBO(33, 33, 33, 1),
-          background: Colors.blue,
+          background: Color.fromARGB(255, 28, 37, 45),
         ),
         useMaterial3: true,
       ),
-      // home: const MyHomePage(title: 'Flutter Demo Home Page'),
     );
   }
 }

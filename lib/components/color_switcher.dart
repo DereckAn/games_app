@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:app_juegos/components/blue_ball_player.dart';
 import 'package:app_juegos/components/color_changer.dart';
-import 'package:app_juegos/components/gameover_dialog.dart';
 import 'package:app_juegos/components/ground.dart';
 import 'package:app_juegos/components/rotator_circular.dart';
 import 'package:app_juegos/components/rotator_x.dart';
@@ -22,9 +21,9 @@ class MyGame extends FlameGame
     with TapCallbacks, HasCollisionDetection, HasDecorator, HasTimeScale {
   late Player myPlayer;
   final random = Random();
-  double lastObstaclePosition = 0;
-  ValueNotifier<int> currentScore = ValueNotifier<int>(0);
-  BuildContext context;
+  late double lastObstaclePosition = 0;
+  final ValueNotifier<int> currentScore = ValueNotifier<int>(0);
+  final BuildContext context;
 
   MyGame(this.context)
       : super(
@@ -113,14 +112,13 @@ class MyGame extends FlameGame
   }
 
   void gameOver() {
-    
     for (var element in world.children) {
       element.removeFromParent();
     }
     // world.add(FlameGameOver(
     //     position: Vector2(0, 0), gameOverSize: 500));
     // pauseGame();
-    
+
     showDialog(
       context: context,
       barrierDismissible: false,
