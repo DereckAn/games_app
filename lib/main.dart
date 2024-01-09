@@ -1,6 +1,8 @@
 import 'package:app_juegos/screens/color_switch_screen.dart';
 import 'package:app_juegos/screens/connect5_screen.dart';
+import 'package:app_juegos/screens/create_tic_tac_toe.dart';
 import 'package:app_juegos/screens/home.dart';
+import 'package:app_juegos/screens/join_tic_tac_toe.dart';
 import 'package:app_juegos/screens/memory_screen.dart';
 import 'package:app_juegos/screens/screen_2048.dart';
 import 'package:app_juegos/screens/snake_screen.dart';
@@ -29,6 +31,8 @@ class MyApp extends StatelessWidget {
         '/memory': (context) => const MemoryScreen(),
         '/colorswitch': (context) => const ColorSwitcherScreen(),
         '/tictactoe': (context) => const TicTacToe(),
+        '/creategame': (context) => const CreateTicTacToeGame(),
+        '/joingame': (context) => const JoinTivTacToe(),
       },
       title: 'Flutter Demo',
       theme: ThemeData(
