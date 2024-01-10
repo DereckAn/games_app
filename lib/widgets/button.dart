@@ -11,10 +11,10 @@ class ButtonMenu extends StatelessWidget {
     final width = MediaQuery.of(context).size.width;
     final height = MediaQuery.of(context).size.height;
     return Container(
-      decoration: const BoxDecoration(
+      decoration:  BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Colors.blue,
+            color: Theme.of(context).colorScheme.secondary,
             blurRadius: 10,
             spreadRadius: 0,
           ),
@@ -24,7 +24,7 @@ class ButtonMenu extends StatelessWidget {
           onPressed: onPressed,
           style: ElevatedButton.styleFrom(
             backgroundColor: Theme.of(context).colorScheme.secondary,
-            minimumSize: Size(width, height / 10),
+            minimumSize: Size(width, height / 12),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(
                   20), // Ajusta este valor para cambiar el radio de las esquinas

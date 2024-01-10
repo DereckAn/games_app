@@ -29,7 +29,7 @@ class TicTacToe extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               ButtonMenu(
-                text: 'Adios gato',
+                text: 'Join Game',
                 onPressed: () => Navigator.pushNamed(context, '/joingame'),
               ),
             ],
