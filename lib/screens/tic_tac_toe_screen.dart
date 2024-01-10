@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 class TicTacToe extends StatelessWidget {
   const TicTacToe({super.key});
 
-  void createRoom(BuildContext context) {
-    Navigator.pushNamed(context, '/creategame');
-  }
+  // void createRoom(BuildContext context) {
+  //   Navigator.pushNamed(context, '/creategame');
+  // }
 
-  void joinRoom(BuildContext context) {
-    Navigator.pushNamed(context, '/joingame');
-  }
+  // void joinRoom(BuildContext context) {
+  //   Navigator.pushNamed(context, '/joingame');
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +25,12 @@ class TicTacToe extends StatelessWidget {
             children: [
               ButtonMenu(
                 text: 'Create Game',
-                onPressed: () => createRoom,
+                onPressed: () => Navigator.pushNamed(context, '/creategame'),
               ),
               const SizedBox(height: 20),
               ButtonMenu(
                 text: 'Adios gato',
-                onPressed: () => joinRoom,
+                onPressed: () => Navigator.pushNamed(context, '/joingame'),
               ),
             ],
           ),

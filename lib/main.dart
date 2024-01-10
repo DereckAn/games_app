@@ -41,6 +41,7 @@ class MyApp extends StatelessWidget {
           secondary: Colors.blue,
           surface: Color.fromRGBO(33, 33, 33, 1),
           background: Color.fromARGB(255, 28, 37, 45),
+          onBackground: Colors.white70
         ),
         useMaterial3: true,
       ),
