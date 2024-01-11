@@ -14,7 +14,7 @@ var io = require("socket.io")(server); // inicializando socket.io  (Manera corta
 // client -> middleware -> server
 app.use(express.json()); // It is when ther eis data from cliente side going to the server side. But trying to modifiy it before it gets to the server side.
 
-const DB = "mongodb+srv://dereckangeles15071998:Unicornio5.@cluster0.hzt6ytt.mongodb.net/?retryWrites=true&w=majority";
+const DB = "";
 mongoose // Estableciendo la conexion con la base de datos
   .connect(DB)
   .then(() => {
