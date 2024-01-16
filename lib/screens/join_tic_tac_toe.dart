@@ -67,6 +67,5 @@ class _JoinTivTacToeState extends State<JoinTivTacToe> {
         ),
       ),
     );
-    ;
   }
 }

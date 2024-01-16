@@ -39,6 +39,7 @@ dependencies:
   flame: ^1.13.1
   flame_audio: ^2.1.6
   socket_io_client: ^2.0.3+1
+  provider: ^6.1.1
 
 dev_dependencies:
   flutter_test:

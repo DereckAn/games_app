@@ -1,3 +1,4 @@
+import 'package:app_juegos/resources/socket_method.dart';
 import 'package:app_juegos/responsive/responsive.dart';
 import 'package:app_juegos/widgets/button.dart';
 import 'package:app_juegos/widgets/custome_text_field.dart';
@@ -13,11 +14,17 @@ class CreateTicTacToeGame extends StatefulWidget {
 
 class _CreateTicTacToeGameState extends State<CreateTicTacToeGame> {
   final TextEditingController _controller = TextEditingController();
+  final SocketMethod _socketMethod = SocketMethod();
 
   @override
   void dispose() {
     super.dispose();
     _controller.dispose();
+  }
+  @override
+  void initState() {
+    super.initState();
+    _socketMethod.createGameSuccessListener(context);
   }
 
   @override
@@ -50,9 +57,9 @@ class _CreateTicTacToeGameState extends State<CreateTicTacToeGame> {
               SizedBox(height: size.height * 0.03),
               ButtonMenu(
                 text: 'Create Game',
-                onPressed: () {
-                  Navigator.pushNamed(context, '/tictactoe');
-                },
+                onPressed: () => _socketMethod.createGame(
+                  _controller.text,
+                ),
               ),
             ],
           ),
