@@ -18,6 +18,7 @@ app.use(express.json()); // It is when ther eis data from cliente side going to 
 
 const DB =
   "mongodb+srv://dereckangeles15071998:Unicornio5.@cluster0.hzt6ytt.mongodb.net/?retryWrites=true&w=majority";
+
 io.on("connection", (socket) => {
   console.log("user connected");
 
@@ -40,13 +41,40 @@ io.on("connection", (socket) => {
       console.log(room);
       const roomID = room._id.toString(); // Aqui estamos obteniendo el id del room
       socket.join(roomID); // Aqui estamos haciendo que el socket se una al room
-    
+
       // Decirle al clietne que el game a sido creado
       // y que se una al room
       // note: Con ioo podemos mandar mensajes a todos los sockets
       // note: Con socket podemos manipular data a mi mismo
 
-      io.to(roomID).emit('createdGameSuccess', room);
+      io.to(roomID).emit("createdGameSuccess", room);
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+  socket.on("joinGame", async ({ username, roomID }) => {
+    try {
+      if (!roomID?.match(/^[0-9a-fA-F]{24}$/)) {
+        socket.emit("joinGameError", "Invalid room ID");
+        return;
+      }
+      let room = await Room.findById(roomID);
+      if (room.isJoin) {
+        let player = {
+          username,
+          socketID: socket.id,
+          playerType: "O",
+        };
+        socket.join(roomID);
+        room.players.push(player);
+        room = await room.save();
+        io.to(roomID).emit("joinGameRoomSuccess", room);
+        io.to(roomID).emit("updatePlayers", room.players);
+
+      } else {
+        socket.emit("joinGameError", "Game is full");
+      }
     } catch (err) {
       console.log(err);
     }

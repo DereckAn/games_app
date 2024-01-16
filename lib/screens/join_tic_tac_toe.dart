@@ -1,3 +1,4 @@
+import 'package:app_juegos/resources/socket_method.dart';
 import 'package:app_juegos/responsive/responsive.dart';
 import 'package:app_juegos/widgets/button.dart';
 import 'package:app_juegos/widgets/custome_text_field.dart';
@@ -14,7 +15,15 @@ class JoinTivTacToe extends StatefulWidget {
 class _JoinTivTacToeState extends State<JoinTivTacToe> {
   final TextEditingController _controller = TextEditingController();
   final TextEditingController _iDcontroller = TextEditingController();
+  final SocketMethod _socketMethod = SocketMethod();
 
+
+  @override
+  void initState() {
+    super.initState();
+    _socketMethod.joinGameRoomSuccess(context);
+    _socketMethod.joinGameError(context);
+  }
 
   @override
   void dispose() {
@@ -51,16 +60,15 @@ class _JoinTivTacToeState extends State<JoinTivTacToe> {
                 hintText: 'Enter your username',
               ),
               SizedBox(height: size.height * 0.03),
-               CustomTextField(
+              CustomTextField(
                 controller: _iDcontroller,
-                hintText: 'Enter game Id',
+                hintText: 'Enter Game Id',
               ),
               SizedBox(height: size.height * 0.03),
               ButtonMenu(
                 text: 'Join Game',
-                onPressed: () {
-                  Navigator.pushNamed(context, '/tictactoe');
-                },
+                onPressed: () => _socketMethod.joinGame(
+                    _controller.text, _iDcontroller.text),
               ),
             ],
           ),
