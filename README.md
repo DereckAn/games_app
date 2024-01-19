@@ -2,6 +2,7 @@
 
 With this project I wanted to put my programming logic into practice. And I'm really putting them into practice! My goal is to recreate each mobile game and then improve it or add a few extra features and improvements. I also want to modify the games to be multiplayer and playable online.
 
+![First](assets/images/menugame.webp)
 
 ## My Role
 
@@ -11,7 +12,12 @@ With this project I wanted to put my programming logic into practice. And I'm re
 - Build the mobile app
 - Find a way to adapt the games to be multiplayer
 
+![Role](assets/images/snake.webp)
+
+
 <!-- :satellite: Technologies -->
+
+
 
 
 ## The Project
@@ -23,3 +29,10 @@ With this project I wanted to put my programming logic into practice. And I'm re
 :moneybag: Outcome:
 
 - 
+
+![Project](assets/images/changecolor.webp)
+![Second](assets/images/tetris.webp)
+![Third](assets/images/menugame.webp)
+
+
+
