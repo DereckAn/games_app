@@ -1,16 +1,25 @@
-# app_juegos
+## :fountain_pen:  Games App
 
-A new Flutter project.
+With this project I wanted to put my programming logic into practice. And I'm really putting them into practice! My goal is to recreate each mobile game and then improve it or add a few extra features and improvements. I also want to modify the games to be multiplayer and playable online.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## My Role
 
-A few resources to get you started if this is your first Flutter project:
+:hammer_and_wrench: Responsabilities:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Implement the logic of each game
+- Build the mobile app
+- Find a way to adapt the games to be multiplayer
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<!-- :satellite: Technologies -->
+
+
+## The Project
+
+:mag_right: Challenges:
+
+- 
+
+:moneybag: Outcome:
+
+- 
