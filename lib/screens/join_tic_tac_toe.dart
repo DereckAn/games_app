@@ -17,12 +17,12 @@ class _JoinTivTacToeState extends State<JoinTivTacToe> {
   final TextEditingController _iDcontroller = TextEditingController();
   final SocketMethod _socketMethod = SocketMethod();
 
-
   @override
   void initState() {
     super.initState();
     _socketMethod.joinGameRoomSuccess(context);
     _socketMethod.joinGameError(context);
+    _socketMethod.updatePlayersStateListener(context);
   }
 
   @override

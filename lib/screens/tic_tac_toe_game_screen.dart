@@ -13,6 +13,9 @@ class _TicTacToeGameState extends State<TicTacToeGame> {
   @override
   Widget build(BuildContext context) {
     String hola = Provider.of<RoomDataProvider>(context).roomData.toString();
+    print(Provider.of<RoomDataProvider>(context).player1.username);
+    print(Provider.of<RoomDataProvider>(context).player2.username);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tic Tac Toe'),
