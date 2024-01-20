@@ -68,6 +68,7 @@ io.on("connection", (socket) => {
         };
         socket.join(roomID);
         room.players.push(player);
+        room.isJoin = false;
         room = await room.save();
         io.to(roomID).emit("joinGameRoomSuccess", room);
         io.to(roomID).emit("updatePlayers", room.players);
