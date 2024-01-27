@@ -12,7 +12,8 @@ class TicTacToeGame extends StatefulWidget {
 class _TicTacToeGameState extends State<TicTacToeGame> {
   @override
   Widget build(BuildContext context) {
-    String hola = Provider.of<RoomDataProvider>(context).roomData.toString();
+    RoomDataProvider roomDataProvider = Provider.of<RoomDataProvider>(context);
+    String hola = roomDataProvider.roomData.toString();
     print(Provider.of<RoomDataProvider>(context).player1.username);
     print(Provider.of<RoomDataProvider>(context).player2.username);
 
@@ -20,7 +21,7 @@ class _TicTacToeGameState extends State<TicTacToeGame> {
       appBar: AppBar(
         title: const Text('Tic Tac Toe'),
       ),
-      body: Center(
+      body: roomDataProvider.roomData['isJoin'] ? Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
