@@ -38,7 +38,7 @@ io.on("connection", (socket) => {
       room.turn = player; // Aqui estamos estableciendo el turno
       room = await room.save(); // Aqui estamos guardando el room en la base de datos
 
-      console.log(room );
+      console.log(room);
       const roomID = room._id.toString(); // Aqui estamos obteniendo el id del room
       socket.join(roomID); // Aqui estamos haciendo que el socket se una al room
 
@@ -76,6 +76,25 @@ io.on("connection", (socket) => {
       } else {
         socket.emit("joinGameError", "Game is full");
       }
+    } catch (err) {
+      console.log(err);
+    }
+  });
+
+  socket.on("tapGrid", async ({ roomID, gridID }) => {
+    try {
+      let room = await Room.findById(roomID);
+      let choice = room.turn.playerType;
+
+      if (room.turnIndex == 0) {
+        room.turn = room.players[1];
+        room.turnIndex = 1;
+      } else {
+        room.turn = room.players[0];
+        room.turnIndex = 0;
+      }
+      room = await room.save();
+      io.to(roomID).emit("tapped", { index, choice, room });
     } catch (err) {
       console.log(err);
     }

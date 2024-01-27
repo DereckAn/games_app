@@ -20,6 +20,12 @@ class SocketMethod {
     }
   }
 
+  void taGrid(int index, String room, List<String> elements) {
+    if (elements[index] == '') {
+      _socketClient.emit('tapGrid', {'index': index, 'roomID': room});
+    }
+  }
+
   // & Listeners
   void createGameSuccessListener(BuildContext context) {
     _socketClient.on('createdGameSuccess', (room) {
@@ -44,6 +50,21 @@ class SocketMethod {
     });
   }
 
+  void updateRoomListener(BuildContext context) {
+    _socketClient.on('updateRoom', (room) {
+      Provider.of<RoomDataProvider>(context, listen: false).updateRoom(room);
+    });
+  }
+
+  void tappedListener(BuildContext context) {
+    _socketClient.on('tapped', (data) {
+      RoomDataProvider roomDataProvider =
+          Provider.of<RoomDataProvider>(context, listen: false);
+      roomDataProvider.updateXO(data['index'], data['symbol']);
+      roomDataProvider.updateRoom(data['room']);
+    });
+  }
+
   // & Functions
   void updatePlayersStateListener(BuildContext context) {
     _socketClient.on('updatePlayers', (playerdata) {
@@ -51,12 +72,6 @@ class SocketMethod {
           .updatePlayer1(playerdata[0]);
       Provider.of<RoomDataProvider>(context, listen: false)
           .updatePlayer2(playerdata[1]); // cuidado con los index
-    });
-  }
-
-  void updateRoomListener(BuildContext context) {
-    _socketClient.on('updateRoom', (room) {
-      Provider.of<RoomDataProvider>(context, listen: false).updateRoom(room);
     });
   }
 }

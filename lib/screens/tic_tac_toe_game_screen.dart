@@ -25,9 +25,8 @@ class _TicTacToeGameState extends State<TicTacToeGame> {
   @override
   Widget build(BuildContext context) {
     RoomDataProvider roomDataProvider = Provider.of<RoomDataProvider>(context);
-    String hola = roomDataProvider.roomData.toString();
-    print(Provider.of<RoomDataProvider>(context).player1.username);
-    print(Provider.of<RoomDataProvider>(context).player2.username);
+    // print(Provider.of<RoomDataProvider>(context).player1.username);
+    // print(Provider.of<RoomDataProvider>(context).player2.username);
 
     return Scaffold(
       appBar: AppBar(
@@ -35,14 +34,12 @@ class _TicTacToeGameState extends State<TicTacToeGame> {
       ),
       body: roomDataProvider.roomData['isJoin']
           ? const WaitingLobby()
-          : SafeArea(
+          : const SafeArea(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const PointsBoard(),
-                  Text(roomDataProvider.player1.username),
-                  Text(roomDataProvider.player2.username),
-                  const TicTacToeBoard(),
+                  PointsBoard(),
+                  TicTacToeBoard(),
                 ],
               ),
             ),
