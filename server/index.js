@@ -38,7 +38,7 @@ io.on("connection", (socket) => {
       room.turn = player; // Aqui estamos estableciendo el turno
       room = await room.save(); // Aqui estamos guardando el room en la base de datos
 
-      console.log(room);
+      console.log(room );
       const roomID = room._id.toString(); // Aqui estamos obteniendo el id del room
       socket.join(roomID); // Aqui estamos haciendo que el socket se una al room
 
@@ -72,6 +72,7 @@ io.on("connection", (socket) => {
         room = await room.save();
         io.to(roomID).emit("joinGameRoomSuccess", room);
         io.to(roomID).emit("updatePlayers", room.players);
+        io.to(roomID).emit("updateRoom", room);
       } else {
         socket.emit("joinGameError", "Game is full");
       }

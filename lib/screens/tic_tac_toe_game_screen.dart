@@ -1,4 +1,8 @@
 import 'package:app_juegos/provider/room_data_provider.dart';
+import 'package:app_juegos/resources/socket_method.dart';
+import 'package:app_juegos/widgets/poinst_board.dart';
+import 'package:app_juegos/widgets/tictactoe_board.dart';
+import 'package:app_juegos/widgets/waiting_lobby.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +14,14 @@ class TicTacToeGame extends StatefulWidget {
 }
 
 class _TicTacToeGameState extends State<TicTacToeGame> {
+  final SocketMethod _socketMethod = SocketMethod();
+  @override
+  void initState() {
+    super.initState();
+    _socketMethod.updateRoomListener(context);
+    _socketMethod.updatePlayersStateListener(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     RoomDataProvider roomDataProvider = Provider.of<RoomDataProvider>(context);
@@ -21,16 +33,19 @@ class _TicTacToeGameState extends State<TicTacToeGame> {
       appBar: AppBar(
         title: const Text('Tic Tac Toe'),
       ),
-      body: roomDataProvider.roomData['isJoin'] ? Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              hola,
+      body: roomDataProvider.roomData['isJoin']
+          ? const WaitingLobby()
+          : SafeArea(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const PointsBoard(),
+                  Text(roomDataProvider.player1.username),
+                  Text(roomDataProvider.player2.username),
+                  const TicTacToeBoard(),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
     );
   }
 }
