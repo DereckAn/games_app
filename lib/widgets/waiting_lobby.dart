@@ -18,7 +18,7 @@ class _WaitingLobbyState extends State<WaitingLobby> {
     _usernameController = TextEditingController(
         text: Provider.of<RoomDataProvider>(context, listen: false)
             .roomData['_id']);
-    print(_usernameController.text.toString());
+    // print(_usernameController.text.toString());
   }
 
   @override

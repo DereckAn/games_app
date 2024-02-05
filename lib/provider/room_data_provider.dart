@@ -6,6 +6,7 @@ class RoomDataProvider extends ChangeNotifier {
   final List<String> _elements = ['', '', '', '', '', '', '', '', ''];
   // List<String> _elements = List<String>.generate(9, (index) => ''); // otra forma de hacerlo
   int _filledboxs = 0;
+  int get filledBoxes => _filledboxs; // Este es el codigo que puse. No se si vaya a causar porblemas en un futuro. 
 
   Player _player1 = Player(username: "", socketID: "", score: 0.0, symbol: "X");
   Player _player2 = Player(username: "", socketID: "", score: 0.0, symbol: "O");

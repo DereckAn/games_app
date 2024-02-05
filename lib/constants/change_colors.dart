@@ -18,6 +18,15 @@ const List<Color> colors = [
   Colors.grey,
 ];
 
+const List<Color> listadecolores =  [
+  Color.fromRGBO(136, 14, 79, 1),
+  Colors.red,
+  Color.fromARGB(255, 25, 121, 168),
+  Colors.teal,
+  Color.fromARGB(255, 145, 242, 26),
+  Colors.amber
+];
+
 List<Color> getSelectedColors() {
   List<Color> modifiableColors = List.from(colors);
   modifiableColors.shuffle();

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
@@ -15,7 +14,8 @@ class _MyHomePageState extends State<MyHomePage> {
       'name': 'Tic Tac Toe 5x5',
       'svg': 'assets/svg/connect.svg',
       'route': '/connect4'
-    },{
+    },
+    {
       'name': 'Tic Tac Toe 3x3',
       'svg': 'assets/svg/connect.svg',
       'route': '/tictactoe'
@@ -32,6 +32,11 @@ class _MyHomePageState extends State<MyHomePage> {
       'name': 'Color Switch',
       'svg': 'assets/svg/slack.svg',
       'route': '/colorswitch'
+    },
+    {
+      'name': 'Color Matcher',
+      'svg': 'assets/svg/colorMatcher.svg',
+      'route': '/colormatcher'
     },
   ];
 

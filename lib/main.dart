@@ -10,6 +10,7 @@ import 'package:app_juegos/screens/snake_screen.dart';
 import 'package:app_juegos/screens/tetris_screen.dart';
 import 'package:app_juegos/screens/tic_tac_toe_game_screen.dart';
 import 'package:app_juegos/screens/tic_tac_toe_screen.dart';
+import 'package:app_juegos/screens/colormatcher_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
           '/creategame': (context) => const CreateTicTacToeGame(),
           '/joingame': (context) => const JoinTivTacToe(),
           '/playingTTT': (context) => const TicTacToeGame(),
+          '/colormatcher': (context) => const ColorMatcherScreen(),
         },
         title: 'Flutter Demo',
         theme: ThemeData(
