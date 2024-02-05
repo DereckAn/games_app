@@ -1,5 +1,6 @@
 import 'package:app_juegos/provider/room_data_provider.dart';
 import 'package:app_juegos/screens/color_switch_screen.dart';
+import 'package:app_juegos/screens/colormatcher_game_screen.dart';
 import 'package:app_juegos/screens/connect5_screen.dart';
 import 'package:app_juegos/screens/create_tic_tac_toe.dart';
 import 'package:app_juegos/screens/home.dart';
@@ -42,6 +43,7 @@ class MyApp extends StatelessWidget {
           '/joingame': (context) => const JoinTivTacToe(),
           '/playingTTT': (context) => const TicTacToeGame(),
           '/colormatcher': (context) => const ColorMatcherScreen(),
+          '/colormatchergame': (context) => const ColorMatcherGame(),
         },
         title: 'Flutter Demo',
         theme: ThemeData(
