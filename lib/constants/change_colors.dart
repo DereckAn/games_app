@@ -42,11 +42,6 @@ List<Color> getSelectedColors() {
   return modifiableColors.take(4).toList();
 }
 
-// MapEntry<Color, String> getSelectedColor() {
-//   List<MapEntry<Color, String>> colorsList = colorNames.entries.toList();
-//   colorsList.shuffle();
-//   return colorsList.first;
-// }
 
 Random random = Random();
 MapEntry<Color, String> getSelectedColor() {
