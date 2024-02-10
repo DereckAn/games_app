@@ -30,7 +30,7 @@ class SocketMethod {
   void createGameSuccessListener(BuildContext context) {
     _socketClient.on('createdGameSuccess', (room) {
       Navigator.pushNamed(context, '/playingTTT', arguments: room);
-      print(room);
+      // print(room);
       Provider.of<RoomDataProvider>(context, listen: false).updateRoom(room);
     });
   }
@@ -38,14 +38,14 @@ class SocketMethod {
   void joinGameRoomSuccess(BuildContext context) {
     _socketClient.on('joinGameRoomSuccess', (room) {
       Navigator.pushNamed(context, '/playingTTT', arguments: room);
-      print(room);
+      // print(room);
       Provider.of<RoomDataProvider>(context, listen: false).updateRoom(room);
     });
   }
 
   void joinGameError(BuildContext context) {
     _socketClient.on('joinGameError', (error) {
-      print(error);
+      // print(error);
       showSnackBar(context, error);
     });
   }

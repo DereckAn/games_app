@@ -1,5 +1,6 @@
 import 'package:app_juegos/provider/room_data_provider.dart';
 import 'package:app_juegos/screens/color_switch_screen.dart';
+import 'package:app_juegos/screens/colormatcher_game_screen.dart';
 import 'package:app_juegos/screens/connect5_screen.dart';
 import 'package:app_juegos/screens/create_tic_tac_toe.dart';
 import 'package:app_juegos/screens/home.dart';
@@ -10,6 +11,7 @@ import 'package:app_juegos/screens/snake_screen.dart';
 import 'package:app_juegos/screens/tetris_screen.dart';
 import 'package:app_juegos/screens/tic_tac_toe_game_screen.dart';
 import 'package:app_juegos/screens/tic_tac_toe_screen.dart';
+import 'package:app_juegos/screens/colormatcher_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -40,6 +42,8 @@ class MyApp extends StatelessWidget {
           '/creategame': (context) => const CreateTicTacToeGame(),
           '/joingame': (context) => const JoinTivTacToe(),
           '/playingTTT': (context) => const TicTacToeGame(),
+          '/colormatcher': (context) => const ColorMatcherScreen(),
+          '/colormatchergame': (context) => const ColorMatcherGame(),
         },
         title: 'Flutter Demo',
         theme: ThemeData(
