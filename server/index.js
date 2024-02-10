@@ -81,7 +81,7 @@ io.on("connection", (socket) => {
     }
   });
 
-  socket.on("tapGrid", async ({ roomID, gridID }) => {
+  socket.on("tapGrid", async ({ index, roomID }) => {
     try {
       let room = await Room.findById(roomID);
       let choice = room.turn.playerType;

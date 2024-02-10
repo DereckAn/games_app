@@ -12,8 +12,9 @@ class TicTacToeBoard extends StatefulWidget {
 
 class _TicTacToeBoardState extends State<TicTacToeBoard> {
   final SocketMethod _socketMethod = SocketMethod();
+  
   void tapped(int index, RoomDataProvider roomDataProvider) {
-    _socketMethod.taGrid(
+    _socketMethod.tapGrid(
         index, roomDataProvider.roomData['_id'], roomDataProvider.elements);
   }
 

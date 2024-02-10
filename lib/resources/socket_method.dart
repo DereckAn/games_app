@@ -20,9 +20,9 @@ class SocketMethod {
     }
   }
 
-  void taGrid(int index, String room, List<String> elements) {
+  void tapGrid(int index, String roomID, List<String> elements) {
     if (elements[index] == '') {
-      _socketClient.emit('tapGrid', {'index': index, 'roomID': room});
+      _socketClient.emit('tapGrid', {'index': index, 'roomID': roomID});
     }
   }
 
@@ -58,10 +58,14 @@ class SocketMethod {
 
   void tappedListener(BuildContext context) {
     _socketClient.on('tapped', (data) {
-      RoomDataProvider roomDataProvider =
-          Provider.of<RoomDataProvider>(context, listen: false);
-      roomDataProvider.updateXO(data['index'], data['symbol']);
-      roomDataProvider.updateRoom(data['room']);
+      if (data['index'] != null && data['symbol'] != null) {
+        RoomDataProvider roomDataProvider =
+            Provider.of<RoomDataProvider>(context, listen: false);
+        roomDataProvider.updateXO(data['index'], data['symbol']);
+        roomDataProvider.updateRoom(data['room']);
+      } else {
+        print('Received null for index or symbol');
+      }
     });
   }
 
