@@ -24,6 +24,9 @@ class MyGame extends FlameGame
   late double lastObstaclePosition = 0;
   final ValueNotifier<int> currentScore = ValueNotifier<int>(0);
   final BuildContext context;
+  late List<Color> selectedColors;
+  late Color selectedColor;
+  final List<PositionComponent> _obstacles = [];
 
   MyGame(this.context)
       : super(
@@ -66,49 +69,85 @@ class MyGame extends FlameGame
     if (myPlayer.position.y < camera.viewfinder.position.y) {
       camera.viewfinder.position = Vector2.zero()..y = myPlayer.position.y;
     }
+    // camera.viewfinder.zoom = 0.1;
 
     super.update(dt);
   }
 
-  void _addCicularObstacles() {
-    List<Color> selectedColors = getSelectedColors();
+  // void _addCicularObstacles() {
+  //   generatingcolors();
+  //   // List<Color> selectedColors = getSelectedColors();
+  //   // Guarda el color seleccionado en una variable.
+  //   // Color selectedColor = selectedColors[random.nextInt(selectedColors.length)];
+  //   // debugMode = true;
+  //   // Asegúrate de que los obstáculos se agreguen en la posición correcta
+  //   world.add(CircleRotator(
+  //       position: Vector2(0, 0),
+  //       size: Vector2(200, 200),
+  //       listColors: selectedColors));
+  //   world.add(StarPoints(position: Vector2(0, 0)));
+  //   world.add(ColorChanger(position: Vector2(0, 200), color: selectedColor));
+
+  //   world.add(XRotator(
+  //       listColors: selectedColors,
+  //       speed: 1.5,
+  //       position: Vector2(0, -500),
+  //       size: Vector2(300, 300)));
+  //   world.add(StarPoints(position: Vector2(0, -500)));
+  // }
+
+  void generatingcolors() {
+    selectedColors = getSelectedColors();
     // Guarda el color seleccionado en una variable.
-    Color selectedColor = selectedColors[random.nextInt(selectedColors.length)];
-    // debugMode = true;
-    // Asegúrate de que los obstáculos se agreguen en la posición correcta
-    world.add(CircleRotator(
-        position: Vector2(0, 0),
-        size: Vector2(200, 200),
-        listColors: selectedColors));
-    world.add(StarPoints(position: Vector2(0, 0)));
-    world.add(ColorChanger(position: Vector2(0, 200), color: selectedColor));
-
-    world.add(XRotator(
-        listColors: colors,
-        speed: 1.5,
-        position: Vector2(0, -500),
-        size: Vector2(300, 300)));
-    world.add(StarPoints(position: Vector2(0, -500)));
-
-    _addingMoreObstacles(2);
+    selectedColor = selectedColors[random.nextInt(selectedColors.length)];
   }
 
-  void _addingMoreObstacles(int distance) {
-    List<Color> selectedColors = getSelectedColors();
-    // Guarda el color seleccionado en una variable.
-    Color selectedColor = selectedColors[random.nextInt(selectedColors.length)];
 
-    world.add(CircleRotator(
-        position: Vector2(0, distance * -500),
+  void _obstacle1(Vector2 distance) {
+    generatingcolors();
+    _addObstacle(CircleRotator(
+        position: Vector2(0, 0) + distance,
         size: Vector2(200, 200),
         listColors: selectedColors));
-    world.add(CircleRotator(
-        position: Vector2(0, distance * -500),
+    _addObstacle(StarPoints(position: Vector2(0, 0) + distance));
+    _addObstacle(ColorChanger(
+        position:  Vector2(0, 200) + distance, color: selectedColor));
+  }
+
+  void _obstacle2(Vector2 distance) {
+    generatingcolors();
+    _addObstacle(XRotator(
+        listColors: selectedColors,
+        speed: 1.5,
+        position: Vector2(0, -400) + distance,
+        size: Vector2(300, 300)));
+    _addObstacle(StarPoints(position: Vector2(0, -400) + distance));
+  }
+
+  void _obstacle3(Vector2 distance) {
+    generatingcolors();
+    _addObstacle(CircleRotator(
+        position: Vector2(0, -900) + distance,
+        size: Vector2(200, 200),
+        listColors: selectedColors));
+    _addObstacle(CircleRotator(
+        position: Vector2(0, -900) + distance,
         size: Vector2(250, 250),
         listColors: selectedColors));
-    world.add(StarPoints(position: Vector2(0, distance * -500)));
-    world.add(ColorChanger(
-        position: Vector2(0, distance * -400), color: selectedColor));
+    _addObstacle(StarPoints(position: Vector2(0, -900) + distance));
+    _addObstacle(ColorChanger(
+        position: Vector2(0, -700) + distance, color: selectedColor));
+  }
+
+  void _addObstacle(PositionComponent obstacle) {
+    _obstacles.add(obstacle);
+    world.add(obstacle);
+  }
+
+  void _generatingObstacles(Vector2 distance) {
+    _obstacle1(distance);
+    _obstacle2(distance);
+    _obstacle3(distance);
   }
 
   void gameOver() {
@@ -136,9 +175,10 @@ class MyGame extends FlameGame
     world.add(Ground(position: Vector2(0, 480)));
     world.add(myPlayer = Player(position: Vector2(0, 300)));
     // debugMode = true;
-    _addCicularObstacles();
+    // _addCicularObstacles();
     lastObstaclePosition = myPlayer.position.y;
     camera.moveTo(Vector2.zero());
+    _generatingObstacles(Vector2.zero());
   }
 
   bool get isGamePause => timeScale == 0;
@@ -158,5 +198,33 @@ class MyGame extends FlameGame
 
   void totalScore() {
     currentScore.value++;
+  }
+
+  void checkToGenerateNextSetObstables(StarPoints startComponets ) {
+    final allStartPoints = _obstacles.whereType<StarPoints>().toList( );
+    final length = allStartPoints.length;
+    for (var i = 0; i < allStartPoints.length; i++) {
+      if(startComponets == allStartPoints[i] && i >= length - 2) {
+        final lastStart = allStartPoints.last;
+        _generatingObstacles(lastStart.position - Vector2(0, 400));
+        _tryGrabageCollector(startComponets);
+      }
+    }
+  }
+  
+  void _tryGrabageCollector(StarPoints startComponets) {
+    for(int i=0; i < _obstacles.length; i++) {
+      if(_obstacles[i] == startComponets && i >= 13) {
+        _removeComponents(i-7);
+        break;
+      }
+    }
+  }
+  
+  void _removeComponents(int i) {
+    for(int j = i -1; j >= 0; j--) {
+      _obstacles[j].removeFromParent();
+      _obstacles.removeAt(j);
+    }
   }
 }

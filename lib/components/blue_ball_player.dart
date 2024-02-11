@@ -82,6 +82,7 @@ class Player extends PositionComponent
       other.collectionAnimation();
       gameRef.totalScore();
       FlameAudio.play('burbuja.mp3');
+      gameRef.checkToGenerateNextSetObstables(other);
     } else if (other is RectanglePart) {
       if (color != (other).color && !isGameOver) {
         isGameOver = true;
