@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
           '/playingTTT': (context) => const TicTacToeGame(),
           '/colormatcher': (context) => const ColorMatcherScreen(),
           '/colormatchergame': (context) => const ColorMatcherGame(),
+          '/flappybirdgame': (context) => const FlappyBirdGame(),
         },
         title: 'Flutter Demo',
         theme: ThemeData(
