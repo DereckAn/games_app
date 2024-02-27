@@ -38,36 +38,51 @@ class _MyHomePageState extends State<MyHomePage> {
       'svg': 'assets/svg/colorMatcher.svg',
       'route': '/colormatcher'
     },
+    {
+      'name': 'Flappy Bird',
+      'svg': 'assets/svg/flappy-bird.svg',
+      'route': '/flappybirdgame'
+    },
   ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Expanded(
-              child: GridView.count(
-                crossAxisCount: 2,
-                children: games.map((game) {
-                  final name = game['name'];
-                  final svg = game['svg'];
-                  final route = game['route'];
-                  if (name != null && svg != null && route != null) {
-                    return ChooseGameButtonW(
-                      gameName: name,
-                      routeSvg: svg,
-                      gameRoute: route,
-                    );
-                  } else {
-                    throw Exception('Missing game data');
-                  }
-                }).toList(),
+    final colorScheme = Theme.of(context).colorScheme;
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: colorScheme.primary,
+        appBar: AppBar(
+          backgroundColor: colorScheme.primary,
+          title: const Text('Games Menu'),
+        ),
+        endDrawer: Drawer(
+          backgroundColor: colorScheme.surface,
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Expanded(
+                child: GridView.count(
+                  crossAxisCount: 2,
+                  children: games.map((game) {
+                    final name = game['name'];
+                    final svg = game['svg'];
+                    final route = game['route'];
+                    if (name != null && svg != null && route != null) {
+                      return ChooseGameButtonW(
+                        gameName: name,
+                        routeSvg: svg,
+                        gameRoute: route,
+                      );
+                    } else {
+                      throw Exception('Missing game data');
+                    }
+                  }).toList(),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

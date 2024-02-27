@@ -3,6 +3,7 @@ import 'package:app_juegos/screens/color_switch_screen.dart';
 import 'package:app_juegos/screens/colormatcher_game_screen.dart';
 import 'package:app_juegos/screens/connect5_screen.dart';
 import 'package:app_juegos/screens/create_tic_tac_toe.dart';
+import 'package:app_juegos/screens/flapy_bird_screen.dart';
 import 'package:app_juegos/screens/home.dart';
 import 'package:app_juegos/screens/join_tic_tac_toe.dart';
 import 'package:app_juegos/screens/memory_screen.dart';
@@ -44,14 +45,14 @@ class MyApp extends StatelessWidget {
           '/playingTTT': (context) => const TicTacToeGame(),
           '/colormatcher': (context) => const ColorMatcherScreen(),
           '/colormatchergame': (context) => const ColorMatcherGame(),
-          '/flappybirdgame': (context) => const FlappyBirdGame(),
+          '/flappybirdgame': (context) => const FlappyBirdScreen(),
         },
         title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: const ColorScheme.dark(
               primary: Color.fromARGB(255, 23, 23, 23),
               secondary: Colors.blue,
-              surface: Color.fromRGBO(33, 33, 33, 1),
+              surface: Color.fromRGBO(24, 122, 148, 1),
               background: Color.fromARGB(255, 28, 37, 45),
               onBackground: Colors.white70),
           useMaterial3: true,
